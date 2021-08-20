@@ -1,0 +1,5843 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ConectionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-conectionHandler"
+      }
+    },
+    "ConnectToRoomActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-connectToRoomActionHandler"
+      }
+    },
+    "ChangingModeActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-changingModeActionHandler"
+      }
+    },
+    "SendQuestionActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-sendQuestionActionHandler"
+      }
+    },
+    "RemoveQuestionActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-removeQuestionActionHandler"
+      }
+    },
+    "RaiseHandActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-raiseHandActionHandler"
+      }
+    },
+    "TalkingFinishedLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-talkingFinished"
+      }
+    },
+    "DrawingActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-drawingActionHandler"
+      }
+    },
+    "SaveBoardActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-saveBoardActionHandler"
+      }
+    },
+    "ClearBoardActionHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-clearBoardActionHandler"
+      }
+    },
+    "UndoHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-undoHandler"
+      }
+    },
+    "RedoHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-redoHandler"
+      }
+    },
+    "DefaultHandlerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-defaultHandler"
+      }
+    },
+    "CreateRoomLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-createRoom"
+      }
+    },
+    "GetQuestionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getQuestions"
+      }
+    },
+    "GetQueueLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getQueue"
+      }
+    },
+    "GetRoomMembersLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getRoomMembers"
+      }
+    },
+    "GetWhiteBoardContentLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getWhiteBoardContent"
+      }
+    },
+    "SubscribeLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-subscribe"
+      }
+    },
+    "PushDashtoDashwebLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-push-to-web"
+      }
+    },
+    "AuthLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-auth"
+      }
+    },
+    "CustomMessageLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-customMessage"
+      }
+    },
+    "RefreshDashtokenLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-refresh-token"
+      }
+    },
+    "SigninLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-signin"
+      }
+    },
+    "SignupLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-signup"
+      }
+    },
+    "ConfirmSignupLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-confirmSignup"
+      }
+    },
+    "ForgotPasswordLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-forgotPassword"
+      }
+    },
+    "ForgotPasswordConfirmLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-forgotPasswordConfirm"
+      }
+    },
+    "ResendVerificationCodeLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-resendVerificationCode"
+      }
+    },
+    "GetUserInformationLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getUserInformation"
+      }
+    },
+    "GetRoomJoinedLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getRoomJoined"
+      }
+    },
+    "GetQuestionAskedLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/khang-deploy-meetings-2-dev-getQuestionAsked"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "khang-deploy-meetings-2",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/khang-deploy-meetings-2-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/khang-deploy-meetings-2-dev*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "execute-api:ManageConnections"
+                  ],
+                  "Resource": "arn:aws:execute-api:*:*:**/@connections/*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ssm:GetParameter"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction",
+                    "lambda:InvokeAsync"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "cognito-idp:AdminInitiateAuth",
+                    "cognito-idp:AdminGetUser"
+                  ],
+                  "Resource": [
+                    "arn:aws:dynamodb:us-east-1:*:table/khang-deploy-meetings-2-CONNECTIONS-dev",
+                    "arn:aws:dynamodb:us-east-1:*:table/khang-deploy-meetings-2-QUEUE-dev",
+                    "arn:aws:dynamodb:us-east-1:*:table/khang-deploy-meetings-2-USER-dev",
+                    {
+                      "Fn::Join": [
+                        "/",
+                        [
+                          "arn:aws:cognito-idp:us-east-1:*:userpool",
+                          {
+                            "Ref": "CognitoUserPool"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "execute-api:ManageConnections"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:execute-api:*:*:*/@connections/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "khang-deploy-meetings-2",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "ConectionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.connection_manager_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-conectionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ConectionHandlerLogGroup"
+      ]
+    },
+    "ConnectToRoomActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.connect_to_room_hanlder",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-connectToRoomActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 10,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ConnectToRoomActionHandlerLogGroup"
+      ]
+    },
+    "ChangingModeActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.changing_mode_handler",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-changingModeActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ChangingModeActionHandlerLogGroup"
+      ]
+    },
+    "SendQuestionActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.send_question_hanlder",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-sendQuestionActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SendQuestionActionHandlerLogGroup"
+      ]
+    },
+    "RemoveQuestionActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.remove_question_hanlder",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-removeQuestionActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RemoveQuestionActionHandlerLogGroup"
+      ]
+    },
+    "RaiseHandActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.raise_hand_hanlder",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-raiseHandActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RaiseHandActionHandlerLogGroup"
+      ]
+    },
+    "TalkingFinishedLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.done_talking_handler",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-talkingFinished",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "TalkingFinishedLogGroup"
+      ]
+    },
+    "DrawingActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.drawing_handler",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-drawingActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 10,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "DrawingActionHandlerLogGroup"
+      ]
+    },
+    "SaveBoardActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.save_board",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-saveBoardActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SaveBoardActionHandlerLogGroup"
+      ]
+    },
+    "ClearBoardActionHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.clear_board",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-clearBoardActionHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ClearBoardActionHandlerLogGroup"
+      ]
+    },
+    "UndoHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.undo_handler",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-undoHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UndoHandlerLogGroup"
+      ]
+    },
+    "RedoHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.redo_handler",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-redoHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RedoHandlerLogGroup"
+      ]
+    },
+    "DefaultHandlerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "ConectionHandler.echo_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-defaultHandler",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "DefaultHandlerLogGroup"
+      ]
+    },
+    "CreateRoomLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.create_room_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-createRoom",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CreateRoomLogGroup"
+      ]
+    },
+    "GetQuestionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.get_room_questions_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getQuestions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetQuestionsLogGroup"
+      ]
+    },
+    "GetQueueLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.get_room_queue_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getQueue",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetQueueLogGroup"
+      ]
+    },
+    "GetRoomMembersLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.get_room_members_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getRoomMembers",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetRoomMembersLogGroup"
+      ]
+    },
+    "GetWhiteBoardContentLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.get_white_board_content_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getWhiteBoardContent",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetWhiteBoardContentLogGroup"
+      ]
+    },
+    "SubscribeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "QueueHandler.subscribe_to_push_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-subscribe",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SubscribeLogGroup"
+      ]
+    },
+    "PushDashtoDashwebLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "push-server.pushToWeb",
+        "Runtime": "nodejs10.x",
+        "FunctionName": "khang-deploy-meetings-2-dev-push-to-web",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "PushDashtoDashwebLogGroup"
+      ]
+    },
+    "AuthLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.verify_auth_token",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-auth",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AuthLogGroup"
+      ]
+    },
+    "CustomMessageLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "custom-message.customMessage",
+        "Runtime": "nodejs10.x",
+        "FunctionName": "khang-deploy-meetings-2-dev-customMessage",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CustomMessageLogGroup"
+      ]
+    },
+    "RefreshDashtokenLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.refresh_token_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-refresh-token",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RefreshDashtokenLogGroup"
+      ]
+    },
+    "SigninLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.sign_in_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-signin",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SigninLogGroup"
+      ]
+    },
+    "SignupLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.sign_up_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-signup",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SignupLogGroup"
+      ]
+    },
+    "ConfirmSignupLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.confirm_sign_up_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-confirmSignup",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ConfirmSignupLogGroup"
+      ]
+    },
+    "ForgotPasswordLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.forgot_password_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-forgotPassword",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ForgotPasswordLogGroup"
+      ]
+    },
+    "ForgotPasswordConfirmLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.confirm_forgot_password_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-forgotPasswordConfirm",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ForgotPasswordConfirmLogGroup"
+      ]
+    },
+    "ResendVerificationCodeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.resend_verification_code_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-resendVerificationCode",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ResendVerificationCodeLogGroup"
+      ]
+    },
+    "GetUserInformationLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.get_user_information_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getUserInformation",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetUserInformationLogGroup"
+      ]
+    },
+    "GetRoomJoinedLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.get_room_joined_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getRoomJoined",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetRoomJoinedLogGroup"
+      ]
+    },
+    "GetQuestionAskedLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/khang-deploy-meetings-2.zip"
+        },
+        "Handler": "AuthenticationHandler.get_question_asked_api",
+        "Runtime": "python3.7",
+        "FunctionName": "khang-deploy-meetings-2-dev-getQuestionAsked",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SERVICE_NAME": "khang-deploy-meetings-2",
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "REGION": "us-east-1",
+            "PUSH_LAMBDA_NAME": "khang-deploy-meetings-2-dev-push-to-web",
+            "QUEUE_TABLE_NAME": "khang-deploy-meetings-2-QUEUE-dev",
+            "USER_TABLE_NAME": "khang-deploy-meetings-2-USER-dev",
+            "CONNECTION_TABLE_NAME": "khang-deploy-meetings-2-CONNECTIONS-dev"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetQuestionAskedLogGroup"
+      ]
+    },
+    "ConectionHandlerLambdaVersionPwyFDaSMcssNQ53lufx37ZbZqlwtqslZBsABczReHE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ConectionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ConnectToRoomActionHandlerLambdaVersionQM2Ie8QkukKJCXPFFn1f5oncHBfqLykoYhSI8LgjH0k": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ConnectToRoomActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ChangingModeActionHandlerLambdaVersionzACAvorc4BXYctR812Hn5jiSSYvY4W7oIgTgveLNQDM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ChangingModeActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "SendQuestionActionHandlerLambdaVersion3Q3OYkAvgLZk66zxEbeOIFnb6P66AgzF0tFkMqq7A": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SendQuestionActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "RemoveQuestionActionHandlerLambdaVersionAO60hnxxOIXgnaucvbQo5LQ125zCPWgoDis5RgUVwY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RemoveQuestionActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "RaiseHandActionHandlerLambdaVersionS4SK0TfZFgrvYmygpee8YoyllgvqWQhOLnkRyWaKUU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RaiseHandActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "TalkingFinishedLambdaVersionIKWr4oxoFrTi4DLjlISNGq5dVapNpHCMt3zXHmnc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "TalkingFinishedLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "DrawingActionHandlerLambdaVersionSRxYmd0reYVEnUPQkeAhbW2ADQxjwsLoTmz9WluE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "DrawingActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "SaveBoardActionHandlerLambdaVersionJ3EkmzTcSXHkPqwazsZWs9DAnauF9E8q2z2NtGgm1B0": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SaveBoardActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ClearBoardActionHandlerLambdaVersion2I5SXZaN7IUGkmyKyHl9i2k89a33dsPJE9fv4dab8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ClearBoardActionHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "UndoHandlerLambdaVersionv4DJYMpF7wCVEYVtw9BOoPr4KQ0EcoLU5d4TgfPX7ms": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UndoHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "RedoHandlerLambdaVersionQwxUpc4Qwh0tCjTFs6EHCcm0rUvIYHOyVPBW9B3QM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RedoHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "DefaultHandlerLambdaVersionongffEZeJEOsDkeleoq5BSXbMf44OIef3HPhqEKGmY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "DefaultHandlerLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "CreateRoomLambdaVersion8vOOrWu4Gq3QbaCUelCNm9myrOOGGYXOpHlU0RMHOAM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateRoomLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetQuestionsLambdaVersionE6GtVVEr8zyxnR1dOpX05FJd3xf8RJEjzfdayfggg8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetQuestionsLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetQueueLambdaVersionwV8mskDcCFUIqDllbZF2Au7aNEC1PIGQS5dw3OKU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetQueueLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetRoomMembersLambdaVersion8ondY7tUHPyRA8aygrMZ4tUpRs5W4rTnTVSbHmXxo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetRoomMembersLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetWhiteBoardContentLambdaVersionalUe7E0ZDeoy8DzzdrkatOMfczraR20g7UNYUpVoiBc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetWhiteBoardContentLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "SubscribeLambdaVersionUS1cyRePSWnQuicgDXlGpq8YIanUxu0g23dvx6c4c": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SubscribeLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "PushDashtoDashwebLambdaVersion75RVep81X6dHKzD8ThpONbb5CtPuwH5kgVkXcrigg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "PushDashtoDashwebLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "AuthLambdaVersionEqAZUehtMNlPHh4GNNusbbXCnSOAxwLI77hdSNTL8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AuthLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "CustomMessageLambdaVersion6ORddC3k2LxRPYKvhaS34AhWg0rUHqTISxooOoEAX0": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CustomMessageLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "RefreshDashtokenLambdaVersionPgCIhybhMJhSx3kY5JtoeeHfBRG5MYugSqOWdYuWjzY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RefreshDashtokenLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "SigninLambdaVersionkxX45zQ3PiHfOrlEax9cTwd94VOArTw2UYziOL24c": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SigninLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "SignupLambdaVersion8wv3iLgXnGr1WUn4vLWAq2JjJxoeTHoaoxSlJeGHRg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SignupLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ConfirmSignupLambdaVersion82FitwSlAygPyJ6pIpjeIfHckRW0J62FyDzgDJshg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ConfirmSignupLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ForgotPasswordLambdaVersionbZrl3K1vaVhm7e5V9v0E40HGwuCxMKRurMCLNyHUfLE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ForgotPasswordLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ForgotPasswordConfirmLambdaVersionwiKfWPC78n7sF3pp8IbJD7TJtW8EsfSLJojDh7e4Y0w": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ForgotPasswordConfirmLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ResendVerificationCodeLambdaVersionAzM3Kriby6m4yrBSPQRB607Ia6ushyeGDot0pOFo7s": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ResendVerificationCodeLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetUserInformationLambdaVersionC3kifw1dd2ekMZIvymt333Z8dtM1mmRATljTPf9UPc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetUserInformationLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetRoomJoinedLambdaVersionT1N5adBLJSAVneC6q2OFad4lA5iSqkn3OqwTxPAF8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetRoomJoinedLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "GetQuestionAskedLambdaVersion8tW5DgJ17LFC14Uvuax1hUwGFQTv6mVf73MkkkQVrk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetQuestionAskedLambdaFunction"
+        },
+        "CodeSha256": "Ux3qpRhGoWeHH2AWReGKab0iv1u+qaPoPlxI7xnlJCg="
+      }
+    },
+    "ApiGatewayRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "dev-khang-deploy-meetings-2",
+        "EndpointConfiguration": {
+          "Types": [
+            "EDGE"
+          ]
+        },
+        "Policy": ""
+      }
+    },
+    "ApiGatewayResourceCreateroom": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "createroom",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetquestions": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getquestions",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetquestionsRoomidVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceGetquestions"
+        },
+        "PathPart": "{roomid}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetqueues": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getqueues",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetqueuesRoomidVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceGetqueues"
+        },
+        "PathPart": "{roomid}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetmembers": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getmembers",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetmembersRoomidVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceGetmembers"
+        },
+        "PathPart": "{roomid}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetwhiteboardcontents": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getwhiteboardcontents",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetwhiteboardcontentsRoomidVar": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceGetwhiteboardcontents"
+        },
+        "PathPart": "{roomid}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSubscribetopush": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "subscribeToPush",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceRefreshtoken": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "refreshtoken",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSignin": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "signin",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSignup": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "signup",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceConfirmsignup": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "confirmsignup",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceForgotpassword": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "forgotpassword",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceConfirmforgotpassword": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "confirmforgotpassword",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceResendverificationcode": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "resendverificationcode",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetuserinfo": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getuserinfo",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetroomjoined": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getroomjoined",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceGetquestionaskedbyuser": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "getquestionaskedbyuser",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodCreateroomOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCreateroom"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetquestionsRoomidVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetquestionsRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetqueuesRoomidVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetqueuesRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetmembersRoomidVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetmembersRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetwhiteboardcontentsRoomidVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetwhiteboardcontentsRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodSubscribetopushOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSubscribetopush"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodRefreshtokenOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceRefreshtoken"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodSigninOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSignin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodSignupOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSignup"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodConfirmsignupOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirmsignup"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodForgotpasswordOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceForgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodConfirmforgotpasswordOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirmforgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodResendverificationcodeOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceResendverificationcode"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetuserinfoOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetuserinfo"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetroomjoinedOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetroomjoined"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodGetquestionaskedbyuserOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Credentials": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Credentials": "'true'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetquestionaskedbyuser"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodCreateroomPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceCreateroom"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "CreateRoomLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetquestionsRoomidVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetquestionsRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetQuestionsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetqueuesRoomidVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetqueuesRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetQueueLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetmembersRoomidVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetmembersRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetRoomMembersLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetwhiteboardcontentsRoomidVarGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetwhiteboardcontentsRoomidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetWhiteBoardContentLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodSubscribetopushPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSubscribetopush"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SubscribeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodRefreshtokenPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceRefreshtoken"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "RefreshDashtokenLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodSigninPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSignin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SigninLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodSignupPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSignup"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SignupLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodConfirmsignupPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirmsignup"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ConfirmSignupLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodForgotpasswordPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceForgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ForgotPasswordLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodConfirmforgotpasswordPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirmforgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ForgotPasswordConfirmLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodResendverificationcodePost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceResendverificationcode"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ResendVerificationCodeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetuserinfoPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetuserinfo"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetUserInformationLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetroomjoinedPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetroomjoined"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetRoomJoinedLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodGetquestionaskedbyuserPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceGetquestionaskedbyuser"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetQuestionAskedLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayDeployment1622982340684": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "StageName": "dev"
+      },
+      "DependsOn": [
+        "ApiGatewayMethodCreateroomOptions",
+        "ApiGatewayMethodGetquestionsRoomidVarOptions",
+        "ApiGatewayMethodGetqueuesRoomidVarOptions",
+        "ApiGatewayMethodGetmembersRoomidVarOptions",
+        "ApiGatewayMethodGetwhiteboardcontentsRoomidVarOptions",
+        "ApiGatewayMethodSubscribetopushOptions",
+        "ApiGatewayMethodRefreshtokenOptions",
+        "ApiGatewayMethodSigninOptions",
+        "ApiGatewayMethodSignupOptions",
+        "ApiGatewayMethodConfirmsignupOptions",
+        "ApiGatewayMethodForgotpasswordOptions",
+        "ApiGatewayMethodConfirmforgotpasswordOptions",
+        "ApiGatewayMethodResendverificationcodeOptions",
+        "ApiGatewayMethodGetuserinfoOptions",
+        "ApiGatewayMethodGetroomjoinedOptions",
+        "ApiGatewayMethodGetquestionaskedbyuserOptions",
+        "ApiGatewayMethodCreateroomPost",
+        "ApiGatewayMethodGetquestionsRoomidVarGet",
+        "ApiGatewayMethodGetqueuesRoomidVarGet",
+        "ApiGatewayMethodGetmembersRoomidVarGet",
+        "ApiGatewayMethodGetwhiteboardcontentsRoomidVarGet",
+        "ApiGatewayMethodSubscribetopushPost",
+        "ApiGatewayMethodRefreshtokenPost",
+        "ApiGatewayMethodSigninPost",
+        "ApiGatewayMethodSignupPost",
+        "ApiGatewayMethodConfirmsignupPost",
+        "ApiGatewayMethodForgotpasswordPost",
+        "ApiGatewayMethodConfirmforgotpasswordPost",
+        "ApiGatewayMethodResendverificationcodePost",
+        "ApiGatewayMethodGetuserinfoPost",
+        "ApiGatewayMethodGetroomjoinedPost",
+        "ApiGatewayMethodGetquestionaskedbyuserPost"
+      ]
+    },
+    "CreateRoomLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateRoomLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetQuestionsLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetQuestionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetQueueLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetQueueLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetRoomMembersLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetRoomMembersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetWhiteBoardContentLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetWhiteBoardContentLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "SubscribeLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SubscribeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "RefreshDashtokenLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RefreshDashtokenLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "SigninLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SigninLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "SignupLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SignupLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ConfirmSignupLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ConfirmSignupLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ForgotPasswordLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ForgotPasswordLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ForgotPasswordConfirmLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ForgotPasswordConfirmLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ResendVerificationCodeLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ResendVerificationCodeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetUserInformationLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetUserInformationLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetRoomJoinedLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetRoomJoinedLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetQuestionAskedLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetQuestionAskedLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-khang-deploy-meetings-2-websockets",
+        "RouteSelectionExpression": "$request.body.action",
+        "Description": "Serverless Websockets",
+        "ProtocolType": "WEBSOCKET"
+      }
+    },
+    "ConectionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "ConectionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "ConnectToRoomActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "ConnectToRoomActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "ChangingModeActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "ChangingModeActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "SendQuestionActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "SendQuestionActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "RemoveQuestionActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "RemoveQuestionActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "RaiseHandActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "RaiseHandActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "TalkingFinishedWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "TalkingFinishedLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "DrawingActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "DrawingActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "SaveBoardActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "SaveBoardActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "ClearBoardActionHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "ClearBoardActionHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "UndoHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "UndoHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "RedoHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "RedoHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "DefaultHandlerWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "DefaultHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "ConectionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "ConectionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ConectionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "ConnectToRoomActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "ConnectToRoomActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ConnectToRoomActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "ChangingModeActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "ChangingModeActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ChangingModeActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SendQuestionActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "SendQuestionActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SendQuestionActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "RemoveQuestionActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "RemoveQuestionActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RemoveQuestionActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "RaiseHandActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "RaiseHandActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RaiseHandActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "TalkingFinishedLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "TalkingFinishedLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "TalkingFinishedLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "DrawingActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "DrawingActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "DrawingActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SaveBoardActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "SaveBoardActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SaveBoardActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "ClearBoardActionHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "ClearBoardActionHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ClearBoardActionHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "UndoHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "UndoHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UndoHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "RedoHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "RedoHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "RedoHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "DefaultHandlerLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "DefaultHandlerLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "DefaultHandlerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$connect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ConectionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "SdisconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$disconnect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ConectionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "connecttoroomWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "connecttoroom",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ConnectToRoomActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "changemodeWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "changemode",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ChangingModeActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "sendquestionWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "sendquestion",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "SendQuestionActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "deletequestionWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "deletequestion",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "RemoveQuestionActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "raisehandWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "raisehand",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "RaiseHandActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "talkingfinishedWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "talkingfinished",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "TalkingFinishedWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "drawingdetectedWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "drawingdetected",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "DrawingActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "saveboardWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "saveboard",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "SaveBoardActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "clearboardWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "clearboard",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ClearBoardActionHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "undolineWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "undoline",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "UndoHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "redolineWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "redoline",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "RedoHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "SdefaultWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$default",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "DefaultHandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsDeploymentStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "StageName": "dev",
+        "Description": "Serverless Websockets",
+        "DeploymentId": {
+          "Ref": "WebsocketsDeploymentVIvU6R3Y8hzq8chcDHdMoGdRYd0Wn6LdecGzxExY4"
+        }
+      }
+    },
+    "WebsocketsDeploymentVIvU6R3Y8hzq8chcDHdMoGdRYd0Wn6LdecGzxExY4": {
+      "Type": "AWS::ApiGatewayV2::Deployment",
+      "DependsOn": [
+        "SconnectWebsocketsRoute",
+        "SdisconnectWebsocketsRoute",
+        "connecttoroomWebsocketsRoute",
+        "changemodeWebsocketsRoute",
+        "sendquestionWebsocketsRoute",
+        "deletequestionWebsocketsRoute",
+        "raisehandWebsocketsRoute",
+        "talkingfinishedWebsocketsRoute",
+        "drawingdetectedWebsocketsRoute",
+        "saveboardWebsocketsRoute",
+        "clearboardWebsocketsRoute",
+        "undolineWebsocketsRoute",
+        "redolineWebsocketsRoute",
+        "SdefaultWebsocketsRoute"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "Description": "Serverless Websockets"
+      }
+    },
+    "CustomMessageCustomCognitoUserPool1": {
+      "Type": "Custom::CognitoUserPool",
+      "Version": 1,
+      "DependsOn": [
+        "CustomMessageLambdaFunction",
+        "CustomDashresourceDashexistingDashcupLambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDashexistingDashcupLambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "khang-deploy-meetings-2-dev-customMessage",
+        "UserPoolName": "khang-deploy-meetings-2-dev-user-pool",
+        "UserPoolConfigs": [
+          {
+            "Trigger": "CustomMessage"
+          }
+        ]
+      }
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "khang-deploy-meetings-2",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Action": [
+                    "cognito-idp:ListUserPools",
+                    "cognito-idp:DescribeUserPool",
+                    "cognito-idp:UpdateUserPool"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:lambda:*:*:function:khang-deploy-meetings-2-dev-customMessage"
+                  },
+                  "Action": [
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:iam::*:role/*"
+                  },
+                  "Action": [
+                    "iam:PassRole"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDashexistingDashcupLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/khang-deploy-meetings-2/dev/1622982357323-2021-06-06T12:25:57.323Z/custom-resources.zip"
+        },
+        "FunctionName": "khang-deploy-meetings-2-dev-custom-resource-existing-cup",
+        "Handler": "cognitoUserPool/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
+    },
+    "CognitoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": "khang-deploy-meetings-2-dev-user-pool",
+        "UsernameAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "Schema": [
+          {
+            "Name": "given_name",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": true
+          },
+          {
+            "Name": "family_name",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": true
+          },
+          {
+            "Name": "email",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": true
+          },
+          {
+            "Name": "phone_number",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": false
+          }
+        ]
+      }
+    },
+    "ConnectionTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "khang-deploy-meetings-2-CONNECTIONS-dev",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    },
+    "QueueTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "khang-deploy-meetings-2-QUEUE-dev",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    },
+    "UserTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "khang-deploy-meetings-2-USER-dev",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "ConectionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ConectionHandlerLambdaVersionPwyFDaSMcssNQ53lufx37ZbZqlwtqslZBsABczReHE"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ConectionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "ConnectToRoomActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ConnectToRoomActionHandlerLambdaVersionQM2Ie8QkukKJCXPFFn1f5oncHBfqLykoYhSI8LgjH0k"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ConnectToRoomActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "ChangingModeActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ChangingModeActionHandlerLambdaVersionzACAvorc4BXYctR812Hn5jiSSYvY4W7oIgTgveLNQDM"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ChangingModeActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "SendQuestionActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SendQuestionActionHandlerLambdaVersion3Q3OYkAvgLZk66zxEbeOIFnb6P66AgzF0tFkMqq7A"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-SendQuestionActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "RemoveQuestionActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RemoveQuestionActionHandlerLambdaVersionAO60hnxxOIXgnaucvbQo5LQ125zCPWgoDis5RgUVwY"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-RemoveQuestionActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "RaiseHandActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RaiseHandActionHandlerLambdaVersionS4SK0TfZFgrvYmygpee8YoyllgvqWQhOLnkRyWaKUU"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-RaiseHandActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "TalkingFinishedLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "TalkingFinishedLambdaVersionIKWr4oxoFrTi4DLjlISNGq5dVapNpHCMt3zXHmnc"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-TalkingFinishedLambdaFunctionQualifiedArn"
+      }
+    },
+    "DrawingActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "DrawingActionHandlerLambdaVersionSRxYmd0reYVEnUPQkeAhbW2ADQxjwsLoTmz9WluE"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-DrawingActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "SaveBoardActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SaveBoardActionHandlerLambdaVersionJ3EkmzTcSXHkPqwazsZWs9DAnauF9E8q2z2NtGgm1B0"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-SaveBoardActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "ClearBoardActionHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ClearBoardActionHandlerLambdaVersion2I5SXZaN7IUGkmyKyHl9i2k89a33dsPJE9fv4dab8"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ClearBoardActionHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "UndoHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UndoHandlerLambdaVersionv4DJYMpF7wCVEYVtw9BOoPr4KQ0EcoLU5d4TgfPX7ms"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-UndoHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "RedoHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RedoHandlerLambdaVersionQwxUpc4Qwh0tCjTFs6EHCcm0rUvIYHOyVPBW9B3QM"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-RedoHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "DefaultHandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "DefaultHandlerLambdaVersionongffEZeJEOsDkeleoq5BSXbMf44OIef3HPhqEKGmY"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-DefaultHandlerLambdaFunctionQualifiedArn"
+      }
+    },
+    "CreateRoomLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateRoomLambdaVersion8vOOrWu4Gq3QbaCUelCNm9myrOOGGYXOpHlU0RMHOAM"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-CreateRoomLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetQuestionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetQuestionsLambdaVersionE6GtVVEr8zyxnR1dOpX05FJd3xf8RJEjzfdayfggg8"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetQuestionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetQueueLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetQueueLambdaVersionwV8mskDcCFUIqDllbZF2Au7aNEC1PIGQS5dw3OKU"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetQueueLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetRoomMembersLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetRoomMembersLambdaVersion8ondY7tUHPyRA8aygrMZ4tUpRs5W4rTnTVSbHmXxo"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetRoomMembersLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetWhiteBoardContentLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetWhiteBoardContentLambdaVersionalUe7E0ZDeoy8DzzdrkatOMfczraR20g7UNYUpVoiBc"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetWhiteBoardContentLambdaFunctionQualifiedArn"
+      }
+    },
+    "SubscribeLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SubscribeLambdaVersionUS1cyRePSWnQuicgDXlGpq8YIanUxu0g23dvx6c4c"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-SubscribeLambdaFunctionQualifiedArn"
+      }
+    },
+    "PushDashtoDashwebLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "PushDashtoDashwebLambdaVersion75RVep81X6dHKzD8ThpONbb5CtPuwH5kgVkXcrigg"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-PushDashtoDashwebLambdaFunctionQualifiedArn"
+      }
+    },
+    "AuthLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AuthLambdaVersionEqAZUehtMNlPHh4GNNusbbXCnSOAxwLI77hdSNTL8"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-AuthLambdaFunctionQualifiedArn"
+      }
+    },
+    "CustomMessageLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CustomMessageLambdaVersion6ORddC3k2LxRPYKvhaS34AhWg0rUHqTISxooOoEAX0"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-CustomMessageLambdaFunctionQualifiedArn"
+      }
+    },
+    "RefreshDashtokenLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RefreshDashtokenLambdaVersionPgCIhybhMJhSx3kY5JtoeeHfBRG5MYugSqOWdYuWjzY"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-RefreshDashtokenLambdaFunctionQualifiedArn"
+      }
+    },
+    "SigninLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SigninLambdaVersionkxX45zQ3PiHfOrlEax9cTwd94VOArTw2UYziOL24c"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-SigninLambdaFunctionQualifiedArn"
+      }
+    },
+    "SignupLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SignupLambdaVersion8wv3iLgXnGr1WUn4vLWAq2JjJxoeTHoaoxSlJeGHRg"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-SignupLambdaFunctionQualifiedArn"
+      }
+    },
+    "ConfirmSignupLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ConfirmSignupLambdaVersion82FitwSlAygPyJ6pIpjeIfHckRW0J62FyDzgDJshg"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ConfirmSignupLambdaFunctionQualifiedArn"
+      }
+    },
+    "ForgotPasswordLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ForgotPasswordLambdaVersionbZrl3K1vaVhm7e5V9v0E40HGwuCxMKRurMCLNyHUfLE"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ForgotPasswordLambdaFunctionQualifiedArn"
+      }
+    },
+    "ForgotPasswordConfirmLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ForgotPasswordConfirmLambdaVersionwiKfWPC78n7sF3pp8IbJD7TJtW8EsfSLJojDh7e4Y0w"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ForgotPasswordConfirmLambdaFunctionQualifiedArn"
+      }
+    },
+    "ResendVerificationCodeLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ResendVerificationCodeLambdaVersionAzM3Kriby6m4yrBSPQRB607Ia6ushyeGDot0pOFo7s"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ResendVerificationCodeLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetUserInformationLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetUserInformationLambdaVersionC3kifw1dd2ekMZIvymt333Z8dtM1mmRATljTPf9UPc"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetUserInformationLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetRoomJoinedLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetRoomJoinedLambdaVersionT1N5adBLJSAVneC6q2OFad4lA5iSqkn3OqwTxPAF8"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetRoomJoinedLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetQuestionAskedLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetQuestionAskedLambdaVersion8tW5DgJ17LFC14Uvuax1hUwGFQTv6mVf73MkkkQVrk"
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-GetQuestionAskedLambdaFunctionQualifiedArn"
+      }
+    },
+    "ServiceEndpoint": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiGatewayRestApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ServiceEndpoint"
+      }
+    },
+    "ServiceEndpointWebsocket": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "wss://",
+            {
+              "Ref": "WebsocketsApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-khang-deploy-meetings-2-dev-ServiceEndpointWebsocket"
+      }
+    }
+  }
+}

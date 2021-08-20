@@ -1,0 +1,17 @@
+{
+  "name": "python-remote-runner",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.590.0",
+    "python": "^0.0.4",
+    "web-push": "^3.4.1"
+  },
+  "devDependencies": {
+    "serverless-domain-manager": "^5.1.0",
+    "serverless-finch": "^2.5.2",
+    "serverless-prune-plugin": "^1.4.2",
+    "serverless-python-requirements": "^5.1.0"
+  }
+}

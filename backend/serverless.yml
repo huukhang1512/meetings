@@ -1,0 +1,434 @@
+app: khang-deploy-meetings-2
+
+service: khang-deploy-meetings-2
+
+package:
+  exclude:
+    - .*/**
+  include:
+    - backend/**
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+plugins:
+  # - serverless-domain-manager
+  - serverless-python-requirements
+  - serverless-finch
+  - serverless-prune-plugin
+custom:
+  # customDomain:
+  #   domainName: https://meetings.buildingblocs.com.au
+  #   basePath: ''
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
+  prune: 
+    automatic: true
+    number : 2
+  client:
+    bucketName: khang-deploy-meetings-2-frontend-${self:provider.stage}
+    distributionFolder: ../frontend/build
+    errorDocument: index.html
+  pythonRequirements:
+      pythonBin: python3
+      dockerizePip: false
+      noDeploy: []
+  USER_POOL_NAME: '${self:service}-${self:provider.stage}-user-pool'
+  QUEUE_TABLE_NAME: '${self:service}-QUEUE-${self:provider.stage}'
+  USER_TABLE_NAME : '${self:service}-USER-${self:provider.stage}'
+  CONNECTION_TABLE_NAME: '${self:service}-CONNECTIONS-${self:provider.stage}'
+  PUSH_LAMBDA_NAME: '${self:service}-${self:provider.stage}-push-to-web'
+
+provider:
+  name: aws  
+  runtime: python3.7
+  environment:
+    SERVICE_NAME: ${self:service}
+    COGNITO_USER_POOL_ID: !Ref CognitoUserPool
+    REGION: ${opt:region, self:provider.region}
+    PUSH_LAMBDA_NAME : ${self:custom.PUSH_LAMBDA_NAME}
+    QUEUE_TABLE_NAME: ${self:custom.QUEUE_TABLE_NAME}
+    USER_TABLE_NAME: ${self:custom.USER_TABLE_NAME}
+    CONNECTION_TABLE_NAME: ${self:custom.CONNECTION_TABLE_NAME}
+
+  websocketApiName: serverless-websocket
+  websocketApiRouteSelectionExpression: $request.body.action
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "execute-api:ManageConnections"
+      Resource:
+        - "arn:aws:execute-api:*:*:**/@connections/*"
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - cognito-idp:AdminInitiateAuth
+        - cognito-idp:AdminGetUser
+      Resource: 
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONNECTION_TABLE_NAME}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.QUEUE_TABLE_NAME}"
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE_NAME}"
+        - 'Fn::Join':
+          - "/"
+          - - "arn:aws:cognito-idp:${opt:region, self:provider.region}:*:userpool"
+            - !Ref CognitoUserPool
+functions:
+  # Web Socket Handlers
+  conectionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.connection_manager_api
+    events:
+      - websocket:
+          route: $connect
+          cors: true
+      - websocket:
+          route: $disconnect
+          cors: true
+  connectToRoomActionHandler:
+    runtime: python3.7
+    timeout: 10
+    handler: ConectionHandler.connect_to_room_hanlder
+    events:
+      - websocket: 
+          route: connecttoroom
+          cors: true
+  changingModeActionHandler: 
+    runtime: python3.7
+    handler: ConectionHandler.changing_mode_handler
+    events:
+      - websocket: 
+          route: changemode
+          cors: true
+  #Q&A
+  sendQuestionActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.send_question_hanlder
+    events:
+      - websocket: 
+          route: sendquestion
+          cors: true
+  removeQuestionActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.remove_question_hanlder
+    events:
+      - websocket: 
+          route: deletequestion
+          cors: true
+  #Meeting Queue
+  raiseHandActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.raise_hand_hanlder
+    events:
+      - websocket: 
+          route: raisehand
+          cors: true  
+  talkingFinished:
+    runtime: python3.7
+    handler: ConectionHandler.done_talking_handler
+    events:
+      - websocket: 
+          route: talkingfinished
+          cors: true
+  #Whiteboard
+  drawingActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.drawing_handler
+    timeout: 10
+    events:
+      - websocket: 
+          route: drawingdetected
+          cors: true
+          runtime: python3.7
+  saveBoardActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.save_board
+    events:
+      - websocket:
+          route: saveboard
+          cors: true
+  clearBoardActionHandler:
+    runtime: python3.7
+    handler: ConectionHandler.clear_board
+    events:
+      - websocket:
+          route: clearboard
+          cors: true
+  undoHandler:
+    runtime: python3.7
+    handler: ConectionHandler.undo_handler
+    events:
+      - websocket:
+          route: undoline
+          cors: true
+  redoHandler:
+    handler: ConectionHandler.redo_handler
+    events:
+      - websocket:
+          route: redoline 
+          cors: true
+  defaultHandler:
+    runtime: python3.7
+    handler: ConectionHandler.echo_api
+    events:
+      - websocket: 
+          route: $default #simple event definition without extra route property
+          cors: true
+
+  # HTTP Handlers          
+  createRoom:
+    runtime: python3.7
+    handler: QueueHandler.create_room_api
+    events:
+      - http:
+          method: post
+          path: createroom
+          cors: true
+  getQuestions: 
+    runtime: python3.7
+    handler: QueueHandler.get_room_questions_api
+    events:
+      - http:
+          method: get
+          path: getquestions/{roomid}
+          cors: true
+  getQueue: 
+    runtime: python3.7
+    handler: QueueHandler.get_room_queue_api
+    events:
+      - http:
+          method: get
+          path: getqueues/{roomid}
+          cors: true
+
+  getRoomMembers: 
+    runtime: python3.7
+    handler: QueueHandler.get_room_members_api
+    events:
+      - http:
+          method: get
+          path: getmembers/{roomid}
+          cors: true
+  getWhiteBoardContent: 
+    runtime : python3.7
+    handler: QueueHandler.get_white_board_content_api
+    events:
+      - http:
+          method: get
+          path: getwhiteboardcontents/{roomid}
+          cors: true
+  subscribe:  
+    runtime: python3.7
+    handler: QueueHandler.subscribe_to_push_api
+    events:
+      - http:
+          method: post
+          path: subscribeToPush
+          cors: true
+  push-to-web:
+    runtime: nodejs10.x
+    name: ${self:custom.PUSH_LAMBDA_NAME}
+    handler: push-server.pushToWeb
+  # Authentication functions
+  auth : 
+    runtime: python3.7
+    handler: AuthenticationHandler.verify_auth_token
+  
+  customMessage:
+    runtime: nodejs10.x
+    handler: custom-message.customMessage
+    events:
+      - cognitoUserPool:
+          pool: ${self:service}-${self:provider.stage}-user-pool
+          trigger: CustomMessage
+          existing: true
+  refresh-token: 
+    runtime: python3.7
+    handler: AuthenticationHandler.refresh_token_api
+    events:
+      - http:
+          method: post
+          path: refreshtoken
+          cors:
+            origin :
+              # - "https://meetings.buildingblocs.com.au"
+              - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
+            allowCredentials: true
+
+  signin: 
+    runtime: python3.7
+    handler: AuthenticationHandler.sign_in_api
+    events:
+      - http:
+          method: post
+          path: signin
+          cors:      
+            origin : 
+              # - "https://meetings.buildingblocs.com.au"
+              - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
+            allowCredentials: true
+  signup:
+    runtime: python3.7
+    handler: AuthenticationHandler.sign_up_api
+    events:
+      - http:
+          method: post
+          path: signup
+          cors: true   
+  confirmSignup:
+    runtime: python3.7
+    handler: AuthenticationHandler.confirm_sign_up_api
+    events:
+      - http:
+          method: post
+          path: confirmsignup
+          cors: true   
+  forgotPassword:
+    runtime: python3.7
+    handler: AuthenticationHandler.forgot_password_api
+    events:
+      - http:
+          method: post
+          path: forgotpassword
+          cors: true   
+  forgotPasswordConfirm:
+    runtime: python3.7
+    handler: AuthenticationHandler.confirm_forgot_password_api
+    events:
+      - http:
+          method: post
+          path: confirmforgotpassword
+          cors: true   
+  resendVerificationCode:
+    runtime: python3.7
+    handler: AuthenticationHandler.resend_verification_code_api
+    events:
+      - http:
+          method: post
+          path: resendverificationcode
+          cors: true   
+  getUserInformation:
+    runtime: python3.7
+    handler: AuthenticationHandler.get_user_information_api
+    events:
+      - http:
+          method: post
+          path: getuserinfo
+          cors:
+            origin : 
+              - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
+            allowCredentials: true
+  getRoomJoined: 
+    runtime: python3.7
+    handler: AuthenticationHandler.get_room_joined_api
+    events:
+      - http:
+          method: post
+          path: getroomjoined
+          cors:
+            origin : 
+              - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
+            allowCredentials: true
+  getQuestionAsked: 
+    runtime: python3.7
+    handler: AuthenticationHandler.get_question_asked_api
+    events:
+      - http:
+          method: post
+          path: getquestionaskedbyuser
+          cors:
+            origin : 
+              - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
+            allowCredentials: true
+resources:
+  Resources:
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        # Generate a name based on the stage
+        UserPoolName: ${self:service}-${self:provider.stage}-user-pool
+        # Set email as an alias
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        Schema:
+          - Name: given_name
+            AttributeDataType: String
+            Mutable: true
+            Required: true
+          - Name: family_name
+            AttributeDataType: String
+            Mutable: true
+            Required: true
+          - Name: email
+            AttributeDataType: String
+            Mutable: true
+            Required: true
+          - Name: phone_number
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+
+    ConnectionTable:
+      Type: 'AWS::DynamoDB::Table'
+      # DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.CONNECTION_TABLE_NAME}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    QueueTable:
+      Type: 'AWS::DynamoDB::Table'
+      # DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.QUEUE_TABLE_NAME}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    UserTable:
+      Type: 'AWS::DynamoDB::Table'
+      # DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.USER_TABLE_NAME}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
