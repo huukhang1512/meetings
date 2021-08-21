@@ -1,9 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import MeetingQueueMode from "../Modes/MeetingQueueMode";
-import QAMode from "../Modes/QAMode"
-import WhiteBoardMode from "../Modes/WhiteBoardMode"
-import ModeChoosing from "../Modes/ModeChoosing"
+// import MeetingQueueMode from "../Modes/MeetingQueueMode";
+// import QAMode from "../Modes/QAMode"
+// import WhiteBoardMode from "../Modes/WhiteBoardMode"
+import MainMode from "../Modes/MainMode"
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {throttle} from "lodash";
 import { changingMode } from '../redux/actions/SocketAction';
@@ -129,20 +129,7 @@ class Room extends React.Component {
   handleClose = () => {
     this.setState({alert : false})
   };
-  renderMode(modeName) {
-    switch (modeName) {
-      case "QandA":
-        return <QAMode />
-      case "MeetingQueue":
-        return <MeetingQueueMode/>
-      case "WhiteBoard":
-        return <WhiteBoardMode/>
-      case "Default Mode":
-        return <ModeChoosing/>
-      default:
-        break;
-    }
-  }
+
 
   renderDrawerButton(){
     const { classes, is_admin,modeName,userName } = this.props;
@@ -249,7 +236,7 @@ class Room extends React.Component {
               </Tooltip>
             </div>
           </div>
-          {this.renderMode(modeName)}
+          <MainMode/>
           <div className = {classes.bottomNav}>
             <Collapse in= {isAway}>
               <Alert className = {classes.alert}severity="error" icon={false}

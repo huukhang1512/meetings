@@ -1,4 +1,4 @@
-SERVICE_NAME="khang-deploy-meetings-2"
+SERVICE_NAME="meetings"
 
 while getopts "s:i:" OPTION; do
     case $OPTION in
