@@ -324,23 +324,6 @@ def message_handler(event,handler):
     }, event)
     return _get_response(200, "Message echo-ed")
 
-def ping_handler(event,handler):
-    body = event.get("body", "")
-    data = json.loads(body)
-    roomId = data["roomId"]
-    content = data["content"]
-    pingType = data["pingType"]
-    connections = get_room_connections(roomId)
-    _send_to_connections(connections, {
-        "action" : PING_MESSAGE,
-        "data" : {
-            "roomId" : roomId,
-            "content" : content,
-            "pingType" : pingType
-        }
-    }, event)
-    return _get_response(200, "Message echo-ed")
-
 def get_connected_room(connectionId):
     try:        
         table = dynamodb.Table(os.environ['CONNECTION_TABLE_NAME'])
