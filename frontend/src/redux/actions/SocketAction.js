@@ -1,10 +1,32 @@
 import {
-  CONNECT_TO_ROOM, DISCONNECT_FROM_ROOM, ADD_NEW_QUEUE,
-  ROOM_CONNECTION_CONFIRMED, ROOM_CONNECTION_FAILED, ADD_NEW_QUEUE_CONFIRMED,
-  ADD_NEW_MEMBER_CONFIRMED, ADD_NEW_QUESTION, ADD_NEW_QUESTION_CONFIRMED,
-  STOP_TALKING, DONE_TALKING_CONFIRMED, REMOVE_MEMBER_FROM_ROOM, CHANGING_MODE_CONFIRMED, CHANGING_MODE,
-  DRAWING_LINES, DRAWING_LINES_CONFIRMED, SAVE_WHITEBOARD, WHITE_BOARD_SAVED, CLEAR_WHITEBOARD, WHITEBOARD_CLEARED,
-  UNDO_ACTION, UNDO_ACTION_DONE, REDO_ACTION, REDO_ACTION_DONE, REMOVE_QUESTION, REMOVE_QUESTION_CONFIRMED,RECONNECT_TO_ROOM
+  CONNECT_TO_ROOM,
+  DISCONNECT_FROM_ROOM,
+  ADD_NEW_QUEUE,
+  ROOM_CONNECTION_CONFIRMED,
+  ROOM_CONNECTION_FAILED,
+  ADD_NEW_QUEUE_CONFIRMED,
+  ADD_NEW_MEMBER_CONFIRMED,
+  ADD_NEW_QUESTION,
+  ADD_NEW_QUESTION_CONFIRMED,
+  STOP_TALKING,
+  DONE_TALKING_CONFIRMED,
+  REMOVE_MEMBER_FROM_ROOM,
+  CHANGING_MODE_CONFIRMED,
+  CHANGING_MODE,
+  DRAWING_LINES,
+  DRAWING_LINES_CONFIRMED,
+  SAVE_WHITEBOARD,
+  WHITE_BOARD_SAVED,
+  CLEAR_WHITEBOARD,
+  WHITEBOARD_CLEARED,
+  UNDO_ACTION,
+  UNDO_ACTION_DONE,
+  REDO_ACTION,
+  REDO_ACTION_DONE,
+  REMOVE_QUESTION,
+  REMOVE_QUESTION_CONFIRMED,
+  RECONNECT_TO_ROOM,
+  MESSAGE_MESSAGE, PING_MESSAGE
 } from "../reducers/RoomReducer"
 import { redirect } from './AppAction'
 import { getQuestionAsked, setRoomJoined } from './UserAction'
@@ -30,7 +52,9 @@ const socketReply = {
   BOARD_SAVED: "BOARD_SAVED",
   BOARD_CLEARED: "BOARD_CLEARED",
   UNDO: "UNDO",
-  REDO: "REDO"
+  REDO: "REDO",
+  MESSAGE_MESSAGE: "MESSAGE_MESSAGE",
+  PING_MESSAGE: "PING_MESSAGE"
 }
 
 const socketAction = {
@@ -398,6 +422,29 @@ export function changingModeConfirmed(roomId, modeName) {
   }
 }
 
+// Chat Message
+export function sendMessage(roomId, sender, message) {
+  return (dispatch) => {
+    dispatch({
+      type: MESSAGE_MESSAGE,
+      roomId: roomId,
+      sender: sender,
+      message: message
+    });
+  }
+}
+
+// Ping
+export function sendPing(roomId, content, type) {
+  return (dispatch) => {
+    dispatch({
+      type: PING_MESSAGE,
+      roomId: roomId,
+      content: content,
+      pingType: type
+    });
+  }
+}
 
 //Socket
 const setupRoomSocket = (roomId, userName,fullName, dispatch) => {

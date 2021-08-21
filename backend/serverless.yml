@@ -354,6 +354,17 @@ functions:
             origin : 
               - "https://test.enu1ar2615.execute-api.us-east-1.amazonaws.com:3000"
             allowCredentials: true
+
+        # Messages
+  messageMessagehandler:
+    runtime: python3.7
+    handler: ConectionHandler.message_handler
+    timeout: 10
+    events:
+      - websocket:
+          route: message
+          cors: true
+          runtime: python3.7
 resources:
   Resources:
     CognitoUserPool:
