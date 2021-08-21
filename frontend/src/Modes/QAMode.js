@@ -125,7 +125,7 @@ class QAMode extends React.Component {
     const { query,checked,alert } = this.state;
     const roomId = this.props.match.params.roomId;
     return (
-      <div>
+      <div style={{height:"50%"}}>
       <div className={classes.mappingItemContainer}>
         <div>
           {(questions.length === 0) ? (

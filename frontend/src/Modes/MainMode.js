@@ -13,7 +13,7 @@ import { styles } from "../UI_Components/UIComponents"
 
 import LeftPanel from "../Components/Layouts/LeftPanel";
 import {RightPanel} from "../Components/Layouts/RightPanel";
-import {MiddlePanel} from "../Components/Layouts/MiddlePanel";
+import MiddlePanel from "../Components/Layouts/MiddlePanel";
 
 class ModeChoosing extends React.Component {
 
@@ -53,7 +53,7 @@ class ModeChoosing extends React.Component {
 
 
   render() {
-    const { classes, is_admin, userName } = this.props;
+    const { classes, emojis } = this.props;
     const { gridItems } =this.state
     const roomId = this.props.match.params.roomId;
     return (
@@ -71,6 +71,9 @@ class ModeChoosing extends React.Component {
           </Grid>
         </Grid>
         </Grid>
+        <div style={{position:"absolute"}}>{emojis.map((item,index) => (
+          <div key={index}>{item.msg}</div>
+        ))}</div>
       </div>
     );
   }
@@ -79,6 +82,7 @@ class ModeChoosing extends React.Component {
 const mapStateToProps = (state) => {
   return {
     roomId: state.room.roomId,
+    emojis: state.room.messages,
     is_admin: state.room.is_admin,
     modeName: state.room.modeName,
     userName: state.user.userName

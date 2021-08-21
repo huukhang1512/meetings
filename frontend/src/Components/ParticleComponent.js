@@ -1,25 +1,39 @@
 import React from "react";
+import { Fragment } from "react";
 
-export class ParticleComponent extends React.Component {
+class ParticleComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            emoji: "",
+            isOngoing:true,
             x: 0,
             y: 0
         };
-        setInterval(this.tick, 10)
     }
-
-    render() {
-        this.state.setState({x: this.state.x + 1})
-        return <div style={{display: "fixed", left: this.state.x, bottom: this.state.y}}>{this.state.emoji}</div>;
-    }
-
-    tick() {
-        this.state.setState({ y: this.state.y + 1});
-        if (this.state.y > 640) {
-            this.componentWillUnmount();
+    tick = () => {
+        const {y} = this.state
+        this.setState({ y: y + 1});
+        if (y > 640) {
+            this.setState({isOngoing : false})
         }
     }
+    componentDidMount(){
+        this.setState({x: this.state.x + 1})
+        setInterval(this.tick, 10)
+        console.log(this.props.emoji)
+    }
+    render() {
+        const { isOngoing } = this.state;
+        return (
+            <Fragment>
+                {(isOngoing) ? (
+                    <div style={{zIndex:1000,fontSize: "45px" ,position: "absolute",right: 0, bottom: this.state.y}}>
+                        {this.props.emoji}
+                    </div> ) : null
+                }
+            </Fragment>
+        );
+    }
+  
 }
+export default ParticleComponent
