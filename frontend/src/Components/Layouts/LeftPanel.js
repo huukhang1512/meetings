@@ -39,8 +39,8 @@ export default function LeftPanel(props){
             <hr />
             <List>
                 <ListItem divider className={classes.topDrawer} style={{display:"flex"}}>
-                    <Button variant="contained" color="primary">Create New Group</Button>
-                    <Button variant="contained" color="primary">Switch Groups</Button>
+                    <Button variant="contained" color="primary" style={{width:"50%"}}>Create Group</Button>
+                    <Button variant="contained" color="primary" style={{width:"50%",marginLeft:"5px"}}>Switch Group</Button>
                 </ListItem>
                 <ListItem divider className={classes.topDrawer} style={{display:"flex"}}>
                     <Button variant="contained" color="secondary" style={{width:"100%"}}>Leave Group</Button>
