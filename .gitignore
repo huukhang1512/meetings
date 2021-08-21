@@ -1,2 +1,6 @@
 
 backend/package-lock.json
+
+frontend/.idea/
+
+frontend/package-lock.json
