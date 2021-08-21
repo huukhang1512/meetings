@@ -1,5 +1,0 @@
-boto3
-botocore
-datetime
-python-jose
-tz

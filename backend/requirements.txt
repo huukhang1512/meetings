@@ -3,3 +3,4 @@ botocore
 datetime
 tz
 python-jose
+azure-cosmos
