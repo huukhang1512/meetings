@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { withRouter } from "react-router-dom";
-
+import { AvatarGenerator } from 'random-avatar-generator';
 // redux
 import { connect } from 'react-redux';
 import { addQuestion,removeQuestion} from '../redux/actions/SocketAction';
@@ -11,6 +11,8 @@ import {Typography,Avatar,Checkbox,IconButton,Tooltip,Card,CardContent,
 CardHeader,Dialog, DialogTitle,DialogActions,Button} from '@material-ui/core';
 import {Send,Delete} from '@material-ui/icons/';
 import {styles} from "../UI_Components/UIComponents";
+import * as tf from '@tensorflow/tfjs-core';
+import '@tensorflow/tfjs-backend-webgl';
 import * as toxicity from '@tensorflow-models/toxicity';
 import {throttle} from "lodash"
 class QAMode extends React.Component {
@@ -25,11 +27,12 @@ class QAMode extends React.Component {
     };
   }
 
-  loadTheModel = () => {
+  loadTheModel = async () => {
     const {threshold} = this.state
-    toxicity.load(threshold).then(model => {
-      this.setState({model : model})
-  });
+    await tf.setBackend('webgl')
+    await tf.ready();
+    let model = await toxicity.load(threshold)
+    this.setState({model : model})
   }
   identifyToxic = async (query) => {
     const {model} = this.state
@@ -48,8 +51,8 @@ class QAMode extends React.Component {
     });
     return toxicIdentified
   }
-  componentDidMount(){
-    this.loadTheModel()
+  async componentDidMount(){
+    await this.loadTheModel()
   }
   getQuestionsAskedbyId = (question_Id) => {
     this.props.getQuestionsAskedbyId(question_Id)
@@ -104,6 +107,14 @@ class QAMode extends React.Component {
     }
    
   }
+  getNewAvatar = (name) => {
+    const generator = new AvatarGenerator()
+    if(name === "Anonymous"){
+        return generator.generateRandomAvatar()
+    } else {
+        return null
+    }
+}
   
   deleteQuestion = throttle((roomId,question_id)=>{
     this.props.removeQuestion(roomId,question_id)
@@ -123,22 +134,25 @@ class QAMode extends React.Component {
           questions.map((q, i) => (
             <div className={classes.cardContainer} key={i} >
                 <Card variant="outlined" className={classes.card}>
-                <CardHeader className={classes.cardHead}avatar={<Avatar className={classes.avatar}>
-                  {this.userNameFirstLetterGetter(q.question.fullName)}</Avatar>} title={q.question.fullName} 
-                subheader="" action = {
-                  is_admin || questionsAsked.find(questionId => questionId === q.question_id) ?
-                  (<Tooltip title="Delete question" placement="left">
-                    <IconButton onClick={()=> this.deleteQuestion(roomId,q.question_id)}>
-                    <Delete/>
-                  </IconButton>
-                  </Tooltip>) : null
-                }>
-                </CardHeader>
-                <CardContent style ={{width : "100%"}}>
-                  <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
-                    {q.question.question}
-                  </Typography>
-                </CardContent>
+                  <CardHeader className={classes.cardHead}
+                    avatar={<Avatar className={classes.avatar} src={this.getNewAvatar(q.question.fullName)}>
+                      {this.userNameFirstLetterGetter(q.question.fullName)}
+                        </Avatar>
+                      } title={q.question.fullName} 
+                  subheader="" action = {
+                    is_admin || questionsAsked.find(questionId => questionId === q.question_id) ?
+                    (<Tooltip title="Delete question" placement="left">
+                      <IconButton onClick={()=> this.deleteQuestion(roomId,q.question_id)}>
+                      <Delete/>
+                    </IconButton>
+                    </Tooltip>) : null
+                  }>
+                  </CardHeader>
+                  <CardContent style ={{width : "100%"}}>
+                    <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
+                      {q.question.question}
+                    </Typography>
+                  </CardContent>
               </Card>
             </div>
             )))}
