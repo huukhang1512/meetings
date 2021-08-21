@@ -1,6 +1,6 @@
-app: khang-deploy-meetings-2
+app: meetings
 
-service: khang-deploy-meetings-2
+service: meetings
 
 package:
   exclude:
@@ -26,7 +26,7 @@ custom:
     automatic: true
     number : 2
   client:
-    bucketName: khang-deploy-meetings-2-frontend-${self:provider.stage}
+    bucketName: meetings-frontend-${self:provider.stage}
     distributionFolder: ../frontend/build
     errorDocument: index.html
   pythonRequirements:
