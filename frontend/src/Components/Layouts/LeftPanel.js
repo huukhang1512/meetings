@@ -7,7 +7,7 @@ import { styles } from "../../UI_Components/UIComponents"
 import Button from "@material-ui/core/Button";
 import { AvatarGenerator } from 'random-avatar-generator';
 import { sendMessage } from "../../redux/actions/SocketAction"
-import ParticleComponent from "../ParticleComponent";
+
 const useStyles = makeStyles(styles)
 function LeftPanel(props){
     const [emojiList] = useState(["👍","👎","⏪","⏩","🤔","🥱"])

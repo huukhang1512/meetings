@@ -27,7 +27,7 @@ class ParticleComponent extends React.Component {
         return (
             <Fragment>
                 {(isOngoing) ? (
-                    <div style={{zIndex:1000,fontSize: "45px" ,position: "absolute",right: 0, bottom: this.state.y}}>
+                    <div style={{zIndex:2000,fontSize: "45px" ,position: "absolute",right: 0, bottom: this.state.y}}>
                         {this.props.emoji}
                     </div> ) : null
                 }

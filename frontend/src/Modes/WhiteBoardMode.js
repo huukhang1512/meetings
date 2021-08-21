@@ -366,8 +366,11 @@ class WhiteBoardMode extends React.Component {
   }
 
   checkSize = () => {
+    const {size} = this.state
     const width = this.container.offsetWidth;
-    const height = this.container.offsetHeight;
+    const height = window.innerHeight - 300;
+
+
     this.setState({
       size : {
         width : width,
@@ -419,7 +422,6 @@ class WhiteBoardMode extends React.Component {
           style ={{cursor : this.renderCursor(mode)}}
           width={size.width}
           height={size.height}
-          height={window.innerHeight - 60}
           onContentTouchstart={this.handleStartDrawing}
           onContentTouchmove={this.handleDrawing}
           onContentTouchend={this.handleStopDrawing}

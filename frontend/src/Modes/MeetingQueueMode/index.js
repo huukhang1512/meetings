@@ -46,7 +46,7 @@ class MeetingQueueMode extends React.Component {
   renderButton = () => {
     const { classes, userName, queue } = this.props;
     const roomId = this.props.match.params.roomId;
-    let buttonLabel = 'Raise';
+    let buttonLabel = 'Raise hand to speak!';
     let handler = () => this.raise(roomId, userName);
     if (queue[0] && queue[0].userName === userName) {
       handler = () => this.finishTalking(roomId, userName);
@@ -72,7 +72,7 @@ class MeetingQueueMode extends React.Component {
     return (
       <div style={{position:"relative",height:"50%"}}>
         <div className={classes.mappingItemContainer}>
-          <h1>Queue</h1>
+          <h1>Speak n Queue</h1>
           {Array.isArray(queue) && queue.length > 0 && (
             <List>
               {queue.map((q, i) => (
