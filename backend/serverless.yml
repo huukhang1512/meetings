@@ -432,3 +432,22 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    # Messages
+    pingMessageHandler:
+      runtime: python3.7
+      handler: ConectionHandler.ping_handler
+      timeout: 10
+      events:
+        - websocket:
+            route: ping
+            cors: true
+            runtime: python3.7
+    messageMessagehandler:
+      runtime: python3.7
+      handler: ConectionHandler.message_handler
+      timeout: 10
+      events:
+        - websocket:
+            route: message
+            cors: true
+            runtime: python3.7

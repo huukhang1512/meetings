@@ -23,6 +23,8 @@ BOARD_SAVED = "BOARD_SAVED"
 BOARD_CLEARED= "BOARD_CLEARED"
 UNDO = "UNDO"
 REDO = "REDO"
+MESSAGE_MESSAGE = "MESSAGE_MESSAGE"
+PING_MESSAGE = "PING_MESSAGE"
 
 def connection_manager_api(event, context):
     """
@@ -302,6 +304,42 @@ def redo_handler(event,handler):
         }
     }, event)
     return _get_response(200, "Message echo-ed.")
+
+def message_handler(event,handler):
+    body = event.get("body", "")
+    data = json.loads(body)
+    roomId = data["roomId"]
+    message = data["message"]
+    sender = data["sender"]
+    # todo validate the person sending it
+    # the *filter*
+    connections = get_room_connections(roomId)
+    _send_to_connections(connections, {
+        "action" : MESSAGE_MESSAGE,
+        "data" : {
+            "roomId" : roomId,
+            "message" : message,
+            "sender" : sender
+        }
+    }, event)
+    return _get_response(200, "Message echo-ed")
+
+def ping_handler(event,handler):
+    body = event.get("body", "")
+    data = json.loads(body)
+    roomId = data["roomId"]
+    content = data["content"]
+    pingType = data["pingType"]
+    connections = get_room_connections(roomId)
+    _send_to_connections(connections, {
+        "action" : PING_MESSAGE,
+        "data" : {
+            "roomId" : roomId,
+            "content" : content,
+            "pingType" : pingType
+        }
+    }, event)
+    return _get_response(200, "Message echo-ed")
 
 def get_connected_room(connectionId):
     try:        
