@@ -13,7 +13,7 @@ import { styles } from "../UI_Components/UIComponents"
 
 import LeftPanel from "../Components/Layouts/LeftPanel";
 import {RightPanel} from "../Components/Layouts/RightPanel";
-import {MiddlePanel} from "../Components/Layouts/MiddlePanel";
+import MiddlePanel from "../Components/Layouts/MiddlePanel";
 
 class ModeChoosing extends React.Component {
 

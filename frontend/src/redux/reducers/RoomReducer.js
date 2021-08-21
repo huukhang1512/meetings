@@ -222,7 +222,6 @@ const roomReducer = (state = initialState, action) => {
       case PING_MESSAGE :
         let messages = [...state.messages];
         messages.push({
-          "message": action.message,
           "content": action.content
         })
         return Object.assign({}, state, {

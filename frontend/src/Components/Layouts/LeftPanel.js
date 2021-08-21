@@ -7,6 +7,7 @@ import { styles } from "../../UI_Components/UIComponents"
 import Button from "@material-ui/core/Button";
 import { AvatarGenerator } from 'random-avatar-generator';
 import { sendMessage } from "../../redux/actions/SocketAction"
+import ParticleComponent from "../ParticleComponent";
 const useStyles = makeStyles(styles)
 function LeftPanel(props){
     const [emojiList] = useState(["👍","👎","⏪","⏩","🤔","🥱"])
@@ -64,7 +65,7 @@ function LeftPanel(props){
                         <Button key={i} onClick={() => sendEmoji(roomId,userName,emoji)} style={{fontSize:25}}>{emoji}</Button>
                     ))}
                 </List>
-                <Button  style={{width: "100%",fontSize:25}}>❤️</Button>
+                <Button onClick={() => sendEmoji(roomId,userName,"❤️")} style={{width: "100%",fontSize:25}}>❤️</Button>
             </div>
         </div>
     )
@@ -73,7 +74,7 @@ function LeftPanel(props){
 const mapStateToProps = (state) => {
     return {
         roomId: state.room.roomId,
-        userName: state.user.userName
+        userName: state.user.userName,
     }
 }
 
