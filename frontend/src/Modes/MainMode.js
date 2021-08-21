@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
 import { throttle } from "lodash";
-
+import QAMode from "./QAMode"
 // redux
 import { connect } from 'react-redux';
 import { changingMode } from '../redux/actions/SocketAction';
@@ -36,7 +36,7 @@ class ModeChoosing extends React.Component {
           width:"29vw",
           name: "RightPane",
           height:"95vh",
-          component: null // add your component here
+          component: <QAMode/> // add your component here
         },
       ]
     }
@@ -58,7 +58,9 @@ class ModeChoosing extends React.Component {
           <Grid container justify="space-around">
             {gridItems.map((value) => (
               <Grid key={value.id} item>
-                <Paper style={{width:value.width, height:value.height}}/>
+                <Paper style={{width:value.width, height:value.height}}>
+                  {value.component}
+                </Paper>
               </Grid>
             ))}
           </Grid>

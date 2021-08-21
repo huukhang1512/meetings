@@ -76,12 +76,8 @@ export const styles = theme => ({
       display : "flex",
       flexDirection: "column",
       position :"relative",
-      height : "87vh",
-      width: "55vw",
-      [theme.breakpoints.down('sm')]: {
-        width : "90vw",
-        height : "85vh"
-      },
+      height : "40vh",
+      width: "100%",
     },
     roomJoinedContainer:{
       margin : "auto",
@@ -281,19 +277,22 @@ export const styles = theme => ({
       position : "relative",
     },
     quesSend:{
-      display: 'inline-block',
+      display: 'flex',
+      flexDirection: "collumn",
+      alignItems: "center",
+      backgroundColor : "#545454",
       position : "relative",
       width : "100%",
       },
     inputQues:{
-      position : "relative",
-      width : "100%",
+      width : "95%",
       color : "white",
-      backgroundColor : "#545454",
+
       justifyContent : "center",
       overflowX : "hidden",
       maxHeight: "30vh",
-      padding : "7px 50px 7px 7px",
+      padding : "0.5em",
+
     },
     cardHead:{
         borderBottom: "1px solid #edeaea"
