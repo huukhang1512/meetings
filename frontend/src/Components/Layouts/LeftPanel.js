@@ -5,6 +5,7 @@ import {Avatar, List, ListItem, ListItemText} from '@material-ui/core';
 import { styles } from "../../UI_Components/UIComponents"
 import Button from "@material-ui/core/Button";
 import { AvatarGenerator } from 'random-avatar-generator';
+import {sendPing} from "../../redux/actions/SocketAction";
 const useStyles = makeStyles(styles)
 
 export default function LeftPanel(props){
@@ -54,10 +55,10 @@ export default function LeftPanel(props){
                 <h2>Reaction</h2>
                 <List>
                     {emojiList.map((emoji,i) => (
-                        <Button key={i} style={{fontSize:25}}>{emoji}</Button>
+                        <Button key={i} style={{fontSize:25}} onClick={sendPing(this.state.roomId, emoji, "react")}>{emoji}</Button>
                     ))}
                 </List>
-                <Button  style={{width: "100%",fontSize:25}}>❤️</Button>
+                <Button onClick={sendPing(this.state.roomId, "❤️", "react")} style={{width: "100%",fontSize:25}}>❤️</Button>
             </div>
         </div>
     )
