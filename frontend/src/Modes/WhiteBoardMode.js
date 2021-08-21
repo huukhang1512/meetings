@@ -24,6 +24,10 @@ class WhiteBoardMode extends React.Component {
       undo : [],
       redo : [],
       tempTextValue: "",
+      size: {
+        width : 1000,
+        height: 1000,
+      },
       drawing: false,
       alert : false,
       open: true,
@@ -53,9 +57,7 @@ class WhiteBoardMode extends React.Component {
   }
   
 
-  componentWillUnmount(){
-    clearInterval(this.interval)
-  }
+ 
 
   changingBrushMode = (mode) => {
     this.setState({
@@ -65,6 +67,8 @@ class WhiteBoardMode extends React.Component {
   }
   componentDidMount() {
     this.handleRenderSpeedial()
+    this.checkSize();
+    window.addEventListener("resize", this.checkSize);
   }
 
   handleClickOpen = () => {
@@ -354,6 +358,21 @@ class WhiteBoardMode extends React.Component {
       </div>
     )
   }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.checkSize);
+    clearInterval(this.interval)
+  }
+
+  checkSize = () => {
+    const width = this.container.offsetWidth;
+    const height = this.container.offsetHeight;
+    this.setState({
+      size : {
+        width : width,
+        height: height,
+      }
+    });
+  };
   renderCursor(mode){
     switch(mode){
       case "brush":
@@ -368,9 +387,13 @@ class WhiteBoardMode extends React.Component {
   }
   render() {
     const { classes, lines, event } = this.props
-    const { localLine, open, actions, show, mode,alert} = this.state
+    const { localLine, open, actions, show, mode,alert,size} = this.state
     return (
-      <div tabIndex={1} onKeyDown={this.handleKeyPress}>
+      <div tabIndex={1} onKeyDown={this.handleKeyPress}
+        ref={node => {
+          this.container = node;
+        }}
+        style={{position:"relative"}}>
         <Dialog
           open={alert}
           onClose={this.handleClickClose}
@@ -392,7 +415,8 @@ class WhiteBoardMode extends React.Component {
         <Stage
           className={classes.canvas}
           style ={{cursor : this.renderCursor(mode)}}
-          width={window.innerWidth}
+          width={size.width}
+          height={size.height}
           height={window.innerHeight - 60}
           onContentTouchstart={this.handleStartDrawing}
           onContentTouchmove={this.handleDrawing}

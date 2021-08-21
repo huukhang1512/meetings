@@ -209,16 +209,16 @@ export const styles = theme => ({
       },
     },
     speedDial: {
-      position: 'fixed',
       height: "90vh",
-      bottom: theme.spacing(2),
+      position: "absolute",
+      bottom: theme.spacing(3),
       right: theme.spacing(1),
     },
     speedDialIcon:{
       background : 'linear-gradient(45deg, #545454 30%, #333333 90%)' 
     },
     slider:{
-      position: 'fixed',
+      position: 'absolute',
       width : "35vw",
       alignItems : "center",
       bottom : "1%",
@@ -236,8 +236,8 @@ export const styles = theme => ({
       display : "inline",
       backgroundColor : "#FFFFFF",
       alignItems : "left",
-      position: 'fixed',
-      bottom : 16,
+      position: 'absolute',
+      bottom : theme.spacing(4),
       borderRadius : 25,
       width : 100,
       boxShadow: '2px 2px 2px 0 rgba(0,0,0,.3)',
@@ -321,8 +321,7 @@ export const styles = theme => ({
     //canvas Mode
     canvas : {
       bottom : 0,
-      position : "fixed",
-      backgroundColor: "#edeaea",
+      backgroundColor: "#FFFFFF",
       display : "block",
       overflow : "auto",
     },
