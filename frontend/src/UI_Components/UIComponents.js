@@ -46,7 +46,7 @@ export const styles = theme => ({
     },
     card:{
       backgroundColor : "#f9f7f7",
-      paddingRight: "10px",
+      paddingRight: "",
       textAlign : "left",
     },
     avatar:{
@@ -140,7 +140,8 @@ export const styles = theme => ({
       bottom : 0,
       left : 0,
       right : 0,
-      position : "fixed",
+      borderTop: '1px solid gray',
+      position : "absolute",
     },
     button: {
       background: 'linear-gradient(45deg, #545454 30%, #333333 90%)',
@@ -299,10 +300,9 @@ export const styles = theme => ({
       },
     cardContainer:{
       overflowX : "hidden",
+      padding : "0.5em",
       marginBottom : 15,
-
       borderRadius : "1em",
-      boxShadow: '4px 4px 4px 0 rgba(0,0,0,.3)',
     },
     appBar: {
       textAlign : "right",

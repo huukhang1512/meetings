@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
 import { throttle } from "lodash";
-import QAMode from "./QAMode"
+
 // redux
 import { connect } from 'react-redux';
 import { changingMode } from '../redux/actions/SocketAction';
@@ -10,8 +10,8 @@ import { changingMode } from '../redux/actions/SocketAction';
 import { Paper, Grid, Typography, Tooltip, Grow } from '@material-ui/core';
 import { BorderColor, FormatListBulleted, QuestionAnswer } from '@material-ui/icons/';
 import { styles } from "../UI_Components/UIComponents"
-import WhiteBoardMode from "./WhiteBoardMode";
-import {LeftPanel} from "../Components/Layouts/LeftPanel";
+
+import LeftPanel from "../Components/Layouts/LeftPanel";
 import {RightPanel} from "../Components/Layouts/RightPanel";
 import {MiddlePanel} from "../Components/Layouts/MiddlePanel";
 

@@ -76,13 +76,9 @@ export function roomConnectionFailed(roomId, error) {
 export function confirmRoomConnectionSuccessful(roomId, isAdmin, modeName) {
   return (dispatch) => {
     dispatch({ type: ROOM_CONNECTION_CONFIRMED, roomId: roomId, isAdmin: isAdmin, modeName: modeName })
-    if (modeName === "MeetingQueue") {
       dispatch(refreshQueues(roomId))
-    } else if (modeName === "QandA") {
       dispatch(refreshQuestions(roomId))
-    } else if (modeName === "WhiteBoard") {
       dispatch(getWhiteBoardContent(roomId))
-    }
   };
 }
 
