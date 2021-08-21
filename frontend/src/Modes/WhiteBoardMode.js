@@ -228,12 +228,14 @@ class WhiteBoardMode extends React.Component {
       this.setState({
         drawing: true,
         userLine : [...userLine,{
-          mode: mode,
-          thickness : thickness, 
+          mode: mode, // eraser or line
+          thickness : thickness,  //
+          colour : "red",
           line: []
         }],
         localLine : [...localLine,{
           mode: mode,
+          colour : "red",
           thickness : thickness, 
           line: []
         }],
@@ -445,7 +447,7 @@ class WhiteBoardMode extends React.Component {
               line.mode === "text" ? (
               <Text text={line.text} x={line.position.x } key={i} y={line.position.y - 50} fontSize={20}></Text>
               ) : (
-              <Line key={i} points={line.line} stroke="black" strokeWidth={line.thickness}
+              <Line key={i} points={line.line} stroke={line.colour} strokeWidth={line.thickness}
               globalCompositeOperation={
                 line.mode === "eraser" ? "destination-out" : "source-over"
               }/>)
@@ -486,7 +488,7 @@ class WhiteBoardMode extends React.Component {
                     fontSize={20}>
                   </Text>
                     ) : (
-                  <Line key={i} points={line.line} stroke={mode === "eraser" ? ("#dddddd"):("black")} strokeWidth={line.thickness}
+                  <Line key={i} points={line.line} stroke={mode === "eraser" ? ("#dddddd"):(line.colour)} strokeWidth={line.thickness}
               />)
             )))}
           </Layer>
