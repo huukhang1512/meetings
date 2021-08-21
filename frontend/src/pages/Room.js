@@ -115,7 +115,9 @@ class Room extends React.Component {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-    type ===  "right" ? (this.setState({ right: open })):(this.setState({instruction: open}))
+    type === "right" ? (this.setState({ right: open })):(this.setState({instruction: open}))
+    type === "ghleft" ? (this.setState({ ghleft: open })):(this.setState({instruction: open}))
+    type === "ghright" ? (this.setState({ ghright: open })):(this.setState({instruction: open}))
   };
 
   componentWillUnmount() {
@@ -162,7 +164,7 @@ class Room extends React.Component {
   }
   render() {
     const { classes, connectionStatus, modeName,fullName, members,is_admin,event } = this.props;
-    const { right,open,alertMessage,alert,isAway } = this.state
+    const { right,ghright,ghleft,open,alertMessage,alert,isAway } = this.state
     const roomId = this.props.match.params.roomId;
     return (
       <div>
@@ -200,7 +202,17 @@ class Room extends React.Component {
               </ListItem>
               <Divider></Divider>
             </Drawer> */}
-            <Drawer anchor="right" open = {right} onClose={this.toggleDrawer(false,"right")} >
+            <div>
+              <a href="javascript:null" onClick={this.toggleDrawer(true, "ghleft")}>Left</a>
+              <a href="javascript:null" onClick={this.toggleDrawer(true, "ghright")}>Right</a>
+            </div>
+            <Drawer anchor="left" open={ghleft} onClose={this.toggleDrawer(false, "ghleft")} >
+              <p>INSERT MOCK LEFT CONTENT HERE</p>
+            </Drawer>
+            <Drawer anchor="right" open={ghright} onClose={this.toggleDrawer(false, "ghright")} >
+              <p>INSERT MOCK RIGHT CONTENT HERE</p>
+            </Drawer>
+            <Drawer anchor="right" open={right} onClose={this.toggleDrawer(false,"right")} >
               <ListItem className={classes.topDrawer}>
                 <Avatar className={classes.headAvatar} style ={{margin : "10px"}}>
                   {this.userNameFirstLetterGetter(fullName)}
