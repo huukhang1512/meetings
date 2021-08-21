@@ -19,18 +19,19 @@ class ModeChoosing extends React.Component {
 
   constructor(props) {
     super(props);
+    // So we took too long and failed to migrate our Serverless instance to Azure, so we didn't have time to implement the new features in the backend, so these do nothing.
     this.state={
       gridItems:[
         {
           id:1,
           name: "LeftPane",
-          width:"29vw",
+          width:"15vw",
           height:"95vh",
           component: <LeftPanel />
         },
         {
           id:2,
-          width:"40vw",
+          width:"54vw",
           name: "MainPane",
           height:"95vh",
           component: <MiddlePanel /> /* <WhiteBoardMode /> */
