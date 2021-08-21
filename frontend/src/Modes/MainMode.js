@@ -2,7 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
 import { throttle } from "lodash";
-
+import QAMode from "./QAMode"
 // redux
 import { connect } from 'react-redux';
 import { changingMode } from '../redux/actions/SocketAction';

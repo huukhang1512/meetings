@@ -1,12 +1,13 @@
 import React from 'react';
 import {} from '@material-ui/core';
+import WhiteBoardMode from '../../Modes/WhiteBoardMode';
 
 export const MiddlePanel = () => {
     console.log("Middle Render");
 
     return (
         <div>
-            <h1>Middle Panel</h1>
+            <WhiteBoardMode></WhiteBoardMode>
         </div>
     )
 

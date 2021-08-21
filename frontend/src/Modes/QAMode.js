@@ -144,7 +144,7 @@ class QAMode extends React.Component {
             )))}
           </div>
         </div>
-        <div className={classes.bottomNav}>
+        <div>
           <div className ={classes.checkBoxArea}>
             <div className = {classes.checkBox}>
               <Checkbox
