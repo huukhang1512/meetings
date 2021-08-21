@@ -140,7 +140,6 @@ export const styles = theme => ({
       bottom : 0,
       left : 0,
       right : 0,
-      position : "fixed",
     },
     button: {
       background: 'linear-gradient(45deg, #545454 30%, #333333 90%)',
