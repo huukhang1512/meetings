@@ -10,6 +10,10 @@ import { changingMode } from '../redux/actions/SocketAction';
 import { Paper, Grid, Typography, Tooltip, Grow } from '@material-ui/core';
 import { BorderColor, FormatListBulleted, QuestionAnswer } from '@material-ui/icons/';
 import { styles } from "../UI_Components/UIComponents"
+import WhiteBoardMode from "./WhiteBoardMode";
+import {LeftPanel} from "../Components/Layouts/LeftPanel";
+import {RightPanel} from "../Components/Layouts/RightPanel";
+import {MiddlePanel} from "../Components/Layouts/MiddlePanel";
 
 class ModeChoosing extends React.Component {
 
@@ -22,21 +26,21 @@ class ModeChoosing extends React.Component {
           name: "LeftPane",
           width:"29vw",
           height:"95vh",
-          component: null // add your component here
+          component: <LeftPanel />
         },
         {
           id:2,
           width:"40vw",
           name: "MainPane",
           height:"95vh",
-          component: null // add your component here
+          component: <MiddlePanel /> /* <WhiteBoardMode /> */
         },
         {
           id:3,
           width:"29vw",
           name: "RightPane",
           height:"95vh",
-          component: null // add your component here
+          component: <RightPanel />
         },
       ]
     }
@@ -58,7 +62,9 @@ class ModeChoosing extends React.Component {
           <Grid container justify="space-around">
             {gridItems.map((value) => (
               <Grid key={value.id} item>
-                <Paper style={{width:value.width, height:value.height}}/>
+                <Paper style={{width:value.width, height:value.height}}>
+                  {value.component}
+                </Paper>
               </Grid>
             ))}
           </Grid>
