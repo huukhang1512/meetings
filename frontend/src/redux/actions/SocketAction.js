@@ -26,7 +26,8 @@ import {
   REMOVE_QUESTION,
   REMOVE_QUESTION_CONFIRMED,
   RECONNECT_TO_ROOM,
-  MESSAGE_MESSAGE, PING_MESSAGE
+  SEND_EMOJI,
+  PING_MESSAGE
 } from "../reducers/RoomReducer"
 import { redirect } from './AppAction'
 import { getQuestionAsked, setRoomJoined } from './UserAction'
@@ -54,7 +55,6 @@ const socketReply = {
   UNDO: "UNDO",
   REDO: "REDO",
   MESSAGE_MESSAGE: "MESSAGE_MESSAGE",
-  PING_MESSAGE: "PING_MESSAGE"
 }
 
 const socketAction = {
@@ -67,6 +67,7 @@ const socketAction = {
   CLEAR_BOARD: "clearboard",
   UNDO_LINE: "undoline",
   REDO_LINE: "redoline",
+  MESSAGE: "sentemoji",
   TALKING_FINISHED: "talkingfinished",
   DRAWING_DETECTED: "drawingdetected"
 }
@@ -425,8 +426,16 @@ export function changingModeConfirmed(roomId, modeName) {
 // Chat Message
 export function sendMessage(roomId, sender, message) {
   return (dispatch) => {
+    if (socket) {
+      socket.send(JSON.stringify({
+        action: socketAction.MESSAGE,
+        roomId: roomId,
+        sender: sender,
+        message: message
+      }))
+    }
     dispatch({
-      type: MESSAGE_MESSAGE,
+      type: SEND_EMOJI,
       roomId: roomId,
       sender: sender,
       message: message
@@ -435,13 +444,13 @@ export function sendMessage(roomId, sender, message) {
 }
 
 // Ping
-export function sendPing(roomId, content, type) {
+export function displayEmoji(roomId, msg) {
+  console.log(msg)
   return (dispatch) => {
     dispatch({
       type: PING_MESSAGE,
       roomId: roomId,
-      content: content,
-      pingType: type
+      content: msg,
     });
   }
 }
@@ -463,6 +472,9 @@ const setupRoomSocket = (roomId, userName,fullName, dispatch) => {
   socket.onmessage = (event) => {
     let { action, data } = JSON.parse(event.data);
     switch (action) {
+      case socketReply.MESSAGE_MESSAGE:
+        dispatch(displayEmoji(roomId,data))
+        break;
       case socketReply.CONNECTION_CONFIRMED:
         dispatch(confirmRoomConnectionSuccessful(roomId, data.is_admin, data.current_mode))
         break;

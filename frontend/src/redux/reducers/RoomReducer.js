@@ -51,7 +51,7 @@ export const CHANGING_MODE = "CHANGING_MODE"
 export const CHANGING_MODE_CONFIRMED = "CHANGING_MODE_CONFIRMED"
 
 //Messaging
-export const MESSAGE_MESSAGE = "MESSAGE_MESSAGE"
+export const SEND_EMOJI = "SEND_EMOJI"
 export const PING_MESSAGE = "PING_MESSAGE"
 
 export const ConnectionStatus = {
@@ -71,7 +71,7 @@ const initialState = {
   queue:[],
   questions:[],
   members: [],
-  messages: []
+  messages: [],
 }
 
 const roomReducer = (state = initialState, action) => {
@@ -219,16 +219,16 @@ const roomReducer = (state = initialState, action) => {
         return Object.assign({},state, {
           modeName : action.modeName
         })
-      case MESSAGE_MESSAGE :
+      case PING_MESSAGE :
         let messages = [...state.messages];
         messages.push({
           "message": action.message,
-          "sender": action.sender
+          "content": action.content
         })
         return Object.assign({}, state, {
           messages : messages
         })
-      case PING_MESSAGE :
+      case SEND_EMOJI :
         console.log(action.payload)
         return state
       default:

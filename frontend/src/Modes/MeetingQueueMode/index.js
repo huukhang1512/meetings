@@ -70,7 +70,7 @@ class MeetingQueueMode extends React.Component {
   render() {
     const { classes, queue } = this.props;
     return (
-      <div>
+      <div style={{position:"relative",height:"50%"}}>
         <div className={classes.mappingItemContainer}>
           <h1>Queue</h1>
           {Array.isArray(queue) && queue.length > 0 && (
