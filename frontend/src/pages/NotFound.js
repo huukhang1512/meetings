@@ -29,7 +29,7 @@ const styles = theme => ({
 })
 class NotFound extends React.Component {
     goHome(){
-        this.props.history.push('/app')
+        this.props.history.push('/')
     }
     render(){
         const { classes } = this.props;

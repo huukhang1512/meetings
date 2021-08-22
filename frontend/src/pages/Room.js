@@ -169,7 +169,7 @@ class Room extends React.Component {
              }}>
               <DialogTitle style ={{color :"#edeaea"}}> Are you sure you want to leave this room ?</DialogTitle>
               <DialogActions>
-                <Button onClick={() => {this.handleClose();this.props.history.push('/app')}} color="secondary">
+                <Button onClick={() => {this.handleClose();this.props.history.push('/')}} color="secondary">
                   Yes
                 </Button>
                 <Button onClick={()=>{this.handleClose()}} color ="secondary" autoFocus>

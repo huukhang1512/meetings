@@ -1,6 +1,6 @@
 import React from 'react';
-import { Router,Switch,Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { HashRouter,Switch,Route } from "react-router-dom";
+import { createHashHistory } from "history";
 import { connect } from 'react-redux';
 import { saveRouteHistory } from './redux/actions/AppAction';
 
@@ -13,7 +13,7 @@ import RoomIdInput from "./pages/RoomIdInput"
 import UserNamePage from "./pages/UserNamePage"
 import './css/App.css';
 
-const customHistory = createBrowserHistory();
+const customHistory = createHashHistory();
 
 class App extends React.Component {
   checkAuth = () => {
@@ -44,13 +44,12 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-        <Router history={customHistory}> 
-          <div>
+        <HashRouter basename='/' history={customHistory}> 
             <Switch>
               <Route exact path="/room/:roomId">
                 <Room></Room>
               </Route>
-              <Route exact path="/app">
+              <Route exact path="/">
                 <Home></Home>
               </Route>
               <Route exact path="/join">
@@ -75,8 +74,7 @@ class App extends React.Component {
                 <NotFound></NotFound>
                 </Route>
             </Switch>
-          </div>
-        </Router>
+        </HashRouter>
       </div>
     );
   }
