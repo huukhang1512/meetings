@@ -23,14 +23,15 @@ function LeftPanel(props){
     }
     return (
         
-        <div style={{height:"100%",position:"relative"}} >
-            <List >
+        <div style={{height:"100%",position:"relative", display:"flex", flexDirection:"column"}} >
+            <div style={{display:"flex",flexDirection:"column", paddingTop:"1em"}} >
                 <ListItem className={classes.topDrawer}>
                     <div>
                         <span style={{fontSize: "2em"}}><b><u>Group Members</u></b></span>
                         <br />Or "Nearby Attendees" or some similar thing...
                     </div>
                 </ListItem>
+                <div>
                 <ListItem className={classes.topDrawer}>
                     <Avatar src={getNewAvatar()}></Avatar>
                     <ListItemText primary={"Person A"} style={{paddingLeft: "10px"}}/>
@@ -43,7 +44,8 @@ function LeftPanel(props){
                     <Avatar src={getNewAvatar()}>C</Avatar>
                     <ListItemText primary={"Person C"} style={{paddingLeft: "10px"}}/>
                 </ListItem>
-            </List>
+                </div>
+            </div>
             <hr />
             <List>
                 <ListItem divider className={classes.topDrawer} style={{display:"flex"}}>
