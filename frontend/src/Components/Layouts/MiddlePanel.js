@@ -24,14 +24,14 @@ const MiddlePanel = (props) => {
     const { emojis } = props
     return (
         <div style={{position:"relative"}}>
-            <div style={{height:"75vh"}}>
+            <div style={{height:"65vh"}}>
                 <WhiteBoardMode></WhiteBoardMode>
             </div>
-            <div style={{height:"20vh",width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between" ,background:"black"}}>
-                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4" ></video>
-                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
-                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
-                <video autoPlay muted style={{width:"25%",height:"90%",objectFit:"cover"}} ref={videoRef}/>
+            <div style={{height:"25vh",width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between" ,background:"black"}}>
+                <video loop autoPlay muted style={{width:"24%",height:"100%",objectFit:"cover",margin:1}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1629609102/2021-08-22_15-10-29_oxtmsi.mp4" ></video>
+                <video loop autoPlay muted style={{width:"24%",height:"100%",objectFit:"cover",margin:1}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1629610551/video_oraf8e.mp4"></video>
+                <video loop autoPlay muted style={{width:"24%",height:"100%",objectFit:"cover",margin:1}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1629609860/LT-Zoom-43s_cuppkt.mp4"></video>
+                <video autoPlay muted style={{width:"24%",height:"100%",objectFit:"cover",margin:1}} ref={videoRef}/>
             </div>
             {emojis.map((emoji,index) => (
                 <ParticleComponent emoji={emoji.content.message} key={index}/>

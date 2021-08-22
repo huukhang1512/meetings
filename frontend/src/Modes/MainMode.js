@@ -26,21 +26,21 @@ class ModeChoosing extends React.Component {
           id:1,
           name: "LeftPane",
           width:"15vw",
-          height:"95vh",
+          height:"90vh",
           component: <LeftPanel />
         },
         {
           id:2,
           width:"54vw",
           name: "MainPane",
-          height:"95vh",
+          height:"90vh",
           component: <MiddlePanel /> /* <WhiteBoardMode /> */
         },
         {
           id:3,
           width:"29vw",
           name: "RightPane",
-          height:"95vh",
+          height:"90vh",
           component: <RightPanel />
         },
       ]
