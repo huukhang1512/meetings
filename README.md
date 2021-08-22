@@ -7,6 +7,9 @@ first
 This mode is created in order to raise question anonymously or with their name attached, make it easier for everyone to ask without worries
 ### Whiteboard
 An interactive real-time whiteboard for better brainstorming within a team
+
+### Reaction
+A typical reaction to the lecture/meeting so that the speaker can indicate wheater or not they should slow down or it is all good
 ### Back End
 This project uses serverless framework. For more details, please visit serverless documentation https://serverless.com/
 
@@ -27,7 +30,7 @@ then with node_modules install, type in your file terminal
 npm start
 ```
 To create your room, click create room and then type in your name, hit proceed on the screen / enter on your keyboard, because you the one who created the room, you the admin of the room.
-When you being redirected to the room, you can choose between Queue, Q&A or Whiteboard mode, this action will broadcast to all the members inside the room. 
+When you being redirected to the room, you can ask question anonymously, react to the live meetings, raise their hand to unmute and lastly, draw something on the shared whiteboard. 
 To join the room, click on the JOIN button on the homepage, type in your ROOM ID and click join room or simply hit enter.
 
 ## Project Reference
