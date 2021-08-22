@@ -28,10 +28,10 @@ const MiddlePanel = (props) => {
                 <WhiteBoardMode></WhiteBoardMode>
             </div>
             <div style={{height:"20vh",width:"100%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between" ,background:"black"}}>
-                <video autoplay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4" ></video>
-                <video autoplay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
-                <video autoplay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
-                <video autoplay muted style={{width:"25%",height:"90%",objectFit:"cover"}} ref={videoRef}/>
+                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4" ></video>
+                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
+                <video autoPlay muted style={{width:"25%",height:"90%"}} src="https://res.cloudinary.com/huukhang1512/video/upload/v1614820927/Meetings_-_Host_better_meetings_3_dxtxvv.mp4"></video>
+                <video autoPlay muted style={{width:"25%",height:"90%",objectFit:"cover"}} ref={videoRef}/>
             </div>
             {emojis.map((emoji,index) => (
                 <ParticleComponent emoji={emoji.content.message} key={index}/>

@@ -23,8 +23,8 @@ function LeftPanel(props){
     }
     return (
         
-        <div style={{height:"100%",position:"relative"}}>
-            <List>
+        <div style={{height:"100%",position:"relative"}} >
+            <List >
                 <ListItem className={classes.topDrawer}>
                     <div>
                         <span style={{fontSize: "2em"}}><b><u>Group Members</u></b></span>
