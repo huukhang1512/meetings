@@ -15,7 +15,7 @@ Meetings uses React + Redux as for Javascript library.
 ## Running the tests
 Install git on your computer, and clone this repo by type in your terminal 
 ```
-git clone https://github.com/tnpha6/questions.git
+git clone https://github.com/huukhang1512/meetings.git
 ```
 Before tempting to run the env, you have to type in your file terminal
 ```
