@@ -87,7 +87,7 @@ export function signin(userName, password) {
         const exp = response.data.AuthenticationResult.ExpiresIn * 1000
         Cookies.set("exp", new Date().getTime() + exp - 1000000)
         dispatch(setupUserAccount())
-        dispatch(redirect('/app'))
+        dispatch(redirect('/'))
         Cookies.set("userEmail", userName)
     }).catch(e => {
       dispatch({type : LOGIN_FAILED,payload : e.response.data})
