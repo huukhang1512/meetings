@@ -23,6 +23,8 @@ class QAMode extends React.Component {
       checked : true,
       threshold: 0.7,
       model : null,
+      filterQuestions: props.questions,
+      sentenceEncoderModel: null,
       alert: false,
     };
   }
@@ -34,6 +36,30 @@ class QAMode extends React.Component {
     let model = await toxicity.load(threshold)
     this.setState({model : model})
   }
+
+  identifySimilarity = (questions) => {
+    let groupQuestions = [] 
+    let specificWord = new Map
+    for(let question of questions){
+      let eachWordOfQues = question.question.question.split(" ")
+      console.log(eachWordOfQues)
+      for(let word of eachWordOfQues){
+        if(!specificWord.has(word)){
+          specificWord.set(word,[question])
+        }else {
+          let questionArr = [...specificWord.get(word)]
+          questionArr.push(question)
+          specificWord.set(word,questionArr)
+        }
+      }
+    }
+    this.setState({filterQuestions: specificWord.values()})
+    console.log(specificWord)
+    // questions.map(question => {
+      
+    // })
+  }
+
   identifyToxic = async (query) => {
     const {model} = this.state
     let toxicIdentified = false
@@ -114,7 +140,14 @@ class QAMode extends React.Component {
     } else {
         return null
     }
-}
+  }
+
+  componentDidUpdate(prevProps,prevState){
+    if(prevProps.questions !== this.props.questions){
+      console.log(prevProps.questions)
+      this.identifySimilarity(this.props.questions)
+    }
+  }
   
   deleteQuestion = throttle((roomId,question_id)=>{
     this.props.removeQuestion(roomId,question_id)
@@ -122,7 +155,7 @@ class QAMode extends React.Component {
 
   render() {
     const { classes, questions,is_admin,questionsAsked } = this.props;
-    const { query,checked,alert } = this.state;
+    const { query,checked,alert,filterQuestions } = this.state;
     const roomId = this.props.match.params.roomId;
     return (
       <div style={{height:"50%"}}>
@@ -131,7 +164,7 @@ class QAMode extends React.Component {
           {(questions.length === 0) ? (
             <h1>Raise any question to your room!</h1>
           ) : (
-          questions.map((q, i) => (
+            questions.map((q, i) => (
             <div className={classes.cardContainer} key={i} >
                 <Card variant="outlined" className={classes.card}>
                   <CardHeader className={classes.cardHead}

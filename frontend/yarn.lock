@@ -1560,7 +1560,7 @@
   dependencies:
     "@tensorflow-models/universal-sentence-encoder" "~1.2.2"
 
-"@tensorflow-models/universal-sentence-encoder@~1.2.2":
+"@tensorflow-models/universal-sentence-encoder@^1.2.2", "@tensorflow-models/universal-sentence-encoder@~1.2.2":
   "integrity" "sha512-fGCl/gwB7jmKCRI2FhgIBeIa/LCSUcjlEcckH2Bc2dIjhJ+2nspp+22lubxcseN6jjrmP42kkXt/reAPe+KJkQ=="
   "resolved" "https://registry.yarnpkg.com/@tensorflow-models/universal-sentence-encoder/-/universal-sentence-encoder-1.2.2.tgz"
   "version" "1.2.2"
