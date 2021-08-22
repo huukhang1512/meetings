@@ -125,7 +125,7 @@ class Home extends React.Component {
               <Tooltip title = "Home" arrow>
                 <img
                   style={{cursor : 'pointer'}}
-                  onClick={()=>{this.props.history.push("/index")}}
+                  onClick={()=>{this.props.history.push("/")}}
                   src={process.env.PUBLIC_URL + '/logo1.png'} 
                   alt ="logo" width = "47px" height = "47px"/>
               </Tooltip>

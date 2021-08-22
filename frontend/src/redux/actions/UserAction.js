@@ -255,6 +255,6 @@ export function logout(){
     Cookies.remove("accessToken")
     Cookies.remove("refreshToken")
     Cookies.remove("exp")
-    dispatch(redirect("/index"))
+    dispatch(redirect("/"))
   }
 }

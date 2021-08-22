@@ -9,11 +9,6 @@ import { refreshToken, setupUserAccount, setError } from "./redux/actions/UserAc
 import Home from "./pages/Home";
 import Room from "./pages/Room";
 import NotFound from "./pages/NotFound";
-// import SignIn from "./pages/SignIn";
-// import SignUp from "./pages/SignUp";
-// import ConfirmSignUp from "./pages/ConfirmSignUp"
-// import ForgotPassword from "./pages/ForgotPassword"
-import LandingPage from "./pages/LandingPage";
 import RoomIdInput from "./pages/RoomIdInput"
 import UserNamePage from "./pages/UserNamePage"
 import './css/App.css';
@@ -57,12 +52,6 @@ class App extends React.Component {
               </Route>
               <Route exact path="/app">
                 <Home></Home>
-              </Route>
-              <Route exact path="/">
-                <LandingPage></LandingPage>
-              </Route>
-              <Route exact path="/index">
-                <LandingPage></LandingPage>
               </Route>
               <Route exact path="/join">
                 <RoomIdInput></RoomIdInput>
