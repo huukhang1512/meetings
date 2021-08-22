@@ -368,7 +368,7 @@ class WhiteBoardMode extends React.Component {
   checkSize = () => {
     const {size} = this.state
     const width = this.container.offsetWidth;
-    const height = window.innerHeight - 300;
+    const height = window.innerHeight - 350;
 
 
     this.setState({
