@@ -29,3 +29,11 @@ npm start
 To create your room, click create room and then type in your name, hit proceed on the screen / enter on your keyboard, because you the one who created the room, you the admin of the room.
 When you being redirected to the room, you can choose between Queue, Q&A or Whiteboard mode, this action will broadcast to all the members inside the room. 
 To join the room, click on the JOIN button on the homepage, type in your ROOM ID and click join room or simply hit enter.
+
+## Project Reference
+
+- [Data exploration notebook](https://www.kaggle.com/junjimoey/online-learning-eda)
+- [Design references](https://docs.google.com/document/d/1iaCGcQx1znO6I6qA_LVYd66oPYXwkbTDfx7LpxG707c/edit)
+- [Google Drive](https://drive.google.com/drive/folders/1-lMj7fKsYCpq8MrDduNFBstJbR7x-6XA?usp=sharing)
+- [Miro - Mind Maps](https://miro.com/welcomeonboard/b1FhMWh6WVRKU1p6RGlDYzRUR3Uxc2VSTjZCWDRVVEFKMWtWVWx5NnpWNjVoZWN4TlMzTUJrY0RMQnVTOUtnN3wzMDc0NDU3MzUwMTAzNDY2MDE0)
+
