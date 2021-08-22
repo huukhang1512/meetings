@@ -40,7 +40,7 @@ class Room extends React.Component {
     const roomId = this.props.match.params.roomId;
     // subscribeToRoom(roomId);
     this.authenticationHandler()
-    document.title = `Meetings - Room ${roomId}`
+    document.title = `Praxis - Room ${roomId}`
   }
   componentDidUpdate(prevProps){
     if (prevProps.event !== this.props.event && this.props.event === "Going away"){

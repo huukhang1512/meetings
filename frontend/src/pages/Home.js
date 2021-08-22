@@ -26,7 +26,7 @@ class Home extends React.Component {
 
   }
   componentDidMount(){
-    document.title = "Meetings - Host better meetings"
+    document.title = "Praxis - Host better meetings"
     if( Cookies.get("userEmail") === null ){
       if(this.props.fullName === " "){
         this.props.history.push("/register")
@@ -142,7 +142,7 @@ class Home extends React.Component {
               <div className={classes.introModeChild}>
                 <h1 className={classes.headingText}>Host better meetings</h1>
                 <Typography variant ="subtitle2" className = {classes.Typography} paragraph>
-                Meetings is a free platform that helps to boost the productivity of both online and offline meetings
+                Praxis is a free platform that helps to boost the productivity of both online and offline meetings
                 </Typography>
                 <br/>
                 <div className = {classes.roomButtonContainer}>
