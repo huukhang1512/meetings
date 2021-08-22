@@ -140,7 +140,6 @@ export const styles = theme => ({
       bottom : 0,
       left : 0,
       right : 0,
-      borderTop: '1px solid gray',
       position : "absolute",
     },
     button: {

@@ -124,16 +124,11 @@ class Home extends React.Component {
             <div className={classes.headerText}>
               <Tooltip title = "Home" arrow>
                 <img
-                  style={{cursor : 'pointer'}}
+                  style={{cursor : 'pointer',objectFit:'contain'}}
                   onClick={()=>{this.props.history.push("/")}}
                   src={process.env.PUBLIC_URL + '/logo1.png'} 
-                  alt ="logo" width = "47px" height = "47px"/>
+                  alt ="logo" width = "47px"/>
               </Tooltip>
-                <span>
-                  <p style={{margin : "16px 0"}}>
-                    eetings
-                  </p>
-                </span>
             </div>
           {fullName === " " ? ( null
           ):(
