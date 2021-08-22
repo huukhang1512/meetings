@@ -35,6 +35,8 @@ To join the room, click on the JOIN button on the homepage, type in your ROOM ID
 
 ## Project Reference
 
+This project is built on top of the the original project "Meetings" by @huukhang1512 (https://meetings.buildingblocs.com.au)
+
 - [Data exploration notebook](https://www.kaggle.com/junjimoey/online-learning-eda)
 - [Design references](https://docs.google.com/document/d/1iaCGcQx1znO6I6qA_LVYd66oPYXwkbTDfx7LpxG707c/edit)
 - [Google Drive](https://drive.google.com/drive/folders/1-lMj7fKsYCpq8MrDduNFBstJbR7x-6XA?usp=sharing)
