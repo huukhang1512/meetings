@@ -158,7 +158,7 @@ class QAMode extends React.Component {
     const { query,checked,alert,filterQuestions } = this.state;
     const roomId = this.props.match.params.roomId;
     return (
-      <div style={{height:"50%"}}>
+      <div style={{position:"relative",height:"50%"}}>
       <div className={classes.mappingItemContainer}>
         <div>
           {(questions.length === 0) ? (
@@ -191,7 +191,7 @@ class QAMode extends React.Component {
             )))}
           </div>
         </div>
-        <div>
+        <div className={classes.bottomNav}>
           <div className ={classes.checkBoxArea}>
             <div className = {classes.checkBox}>
               <Checkbox
