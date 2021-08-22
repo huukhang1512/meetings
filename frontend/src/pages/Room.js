@@ -215,10 +215,11 @@ class Room extends React.Component {
             <div className={classes.headerText}>
               <Tooltip title = "Leave room" arrow>
                   <img 
+                    style={{objectFit:'contain'}}
                     className = {classes.logo} 
                     onClick={()=> this.handleClickOpen()}
                     src={process.env.PUBLIC_URL + '/logo1.png'} 
-                    alt ="logo" width = "47px" height = "47px"/>
+                    alt ="logo" width = "47px"/>
               </Tooltip>
               <Divider orientation="vertical" flexItem/>
                 <Typography style ={{margin : 12,color : "#545454",fontWeight: "bolder",}}>{roomId}</Typography>

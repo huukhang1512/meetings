@@ -7,7 +7,7 @@ self.addEventListener('message', (event) => {
       self.skipWaiting();
     }
   });
-const FALLBACK_HTML_URL = ['/offline.html','/logo1.png','/logo2.png']
+const FALLBACK_HTML_URL = ['/offline.html','/logo1.png']
 const networkOnly = new workbox.strategies.NetworkOnly();
 workbox.precaching.precacheAndRoute(FALLBACK_HTML_URL);
 
