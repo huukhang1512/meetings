@@ -1,6 +1,8 @@
 # PRAXIS app
 Note: reponsive design is not added to the application, Praxis is going to work best on a desktop/laptop under 100% scale
 
+Project link : https://huukhang1512.github.io/meetings
+
 Meeting is an essential in every work of a company and remote learning expiriences. This project is create in order to host a better meeting. Currently the application has 3 modes:
 ### Meeting Queue
 There are some meetings that people talk all at once, when entering this mode, it is required people to speak in queue, whoever hit the raise button first will talk first, when that person done talking, they will hit the button done, give turn to the people who hit raise after
