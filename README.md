@@ -2,7 +2,8 @@
 Meeting is an essential in every work of a company. This project is create in order to host a better meeting. Currently the application has 3 modes:
 ### Meeting Queue
 There are some meetings that people talk all at once, when entering this mode, it is required people to speak in queue, whoever hit the raise button first will talk first, when that person done talking, they will hit the button done, give turn to the people who hit raise after
-yutube### Question and Answer
+first
+### Question and Answer
 This mode is created in order to raise question anonymously or with their name attached, make it easier for everyone to ask without worries
 ### Whiteboard
 An interactive real-time whiteboard for better brainstorming within a team
